@@ -1,0 +1,18 @@
+/.vagrant
+/scrapy.iml
+*.pyc
+*.json
+_trial_temp*
+dropin.cache
+docs/build
+*egg-info
+.tox
+venv
+build
+dist
+.idea
+htmlcov/
+.coverage
+
+# Windows
+Thumbs.db
