@@ -16,8 +16,20 @@ class TikiSpider(scrapy.Spider):
     name = "tiki"
     allowed_domains = ["tiki.vn"]
     start_urls = [
-            'https://tiki.vn/sach-truyen-tieng-viet/c316',
-            'https://tiki.vn/sach-tieng-anh/c320',
+            "https://tiki.vn/sach-kinh-te/c846",
+            "https://tiki.vn/sach-van-hoc/c839",
+            "https://tiki.vn/sach-ky-nang-song-dep/c870",
+            "https://tiki.vn/sach-nuoi-day-con/c2527",
+            "https://tiki.vn/sach-kien-thuc-tong-hop/c873",
+            "https://tiki.vn/chinh-tri-phap-ly/c875",
+            "https://tiki.vn/tam-ly-gioi-tinh/c868",
+            "https://tiki.vn/sach-teen/c714",
+            "https://tiki.vn/fiction-literature/c9",
+            "https://tiki.vn/how-to-advice/c614",
+            "https://tiki.vn/teens/c31",
+            "https://tiki.vn/memoirs-biographies/c15",
+            "https://tiki.vn/business-investing/c4",
+            "https://tiki.vn/culture-and-art/c623",
             ]
 
     mc = MapCompose(lambda i: urlparse.urljoin('http://tiki.vn', i))

@@ -2,6 +2,7 @@
 /scrapy.iml
 *.pyc
 *.json
+*.swp
 _trial_temp*
 dropin.cache
 docs/build
