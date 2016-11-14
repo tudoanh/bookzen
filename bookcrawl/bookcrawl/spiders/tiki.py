@@ -1,15 +1,14 @@
 # -*- coding: utf-8 -*-
-from scrapy.loader import ItemLoader
-from scrapy.loader.processors import TakeFirst, MapCompose
-from scrapy.http import Request
-from bookcrawl.items import BooksItem
-
-import scrapy
-
 import datetime
+import scrapy
 import socket
 import urlparse
 import re
+
+from scrapy.loader import ItemLoader
+from scrapy.loader.processors import TakeFirst, MapCompose, Join
+from scrapy.http import Request
+from bookcrawl.items import BooksItem
 
 
 class TikiSpider(scrapy.Spider):
@@ -54,7 +53,8 @@ class TikiSpider(scrapy.Spider):
         l.add_xpath('author', '//*[@class="item-brand"]/p/a/text()')
         l.add_xpath('price', '//*[@id="span-price"]/text()', TakeFirst(), re=r'\d+\.\d+')
         l.add_value('description',
-                    [re.sub('<[^<]+?>', '', i) for i in l.get_xpath('//*[@id="gioi-thieu"]/p')])
+                    [re.sub('<[^<]+?>', '', i) for i in l.get_xpath('//*[@id="gioi-thieu"]/p')],
+                    Join('\n'))
         l.add_xpath('image_uri', '//*[@itemprop="image"]/@src')
 
         # Information fields
