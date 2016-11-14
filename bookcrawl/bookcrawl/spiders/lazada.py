@@ -1,15 +1,12 @@
 # -*- coding: utf-8 -*-
 import datetime
-import scrapy
 import socket
-import urlparse
 import re
 
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy.loader import ItemLoader
-from scrapy.loader.processors import TakeFirst, MapCompose
-from scrapy.http import Request
+from scrapy.loader.processors import MapCompose
 from bookcrawl.items import BooksItem
 
 
