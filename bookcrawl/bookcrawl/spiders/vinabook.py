@@ -42,7 +42,7 @@ class VinabookSpider(CrawlSpider):
                     filter(None,
                         [re.sub('<[^<]+?>', '', i) for i in l.get_xpath('//*[@class="full-description"]/p')]),
                     Join('\n'))
-        l.add_value('image_uri', '//*[@itemprop="image"]/@src')
+        l.add_xpath('image_uri', '//*[@itemprop="image"]/@src')
 
         # Information fields
         l.add_value('url', response.url)

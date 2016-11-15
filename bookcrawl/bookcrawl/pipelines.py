@@ -46,6 +46,6 @@ class MongoPipeline(object):
             if collection.find({'name': item['name'], 'spider': spider.name}).count() != 0:
                 raise DropItem("Item existed")
             else:
-                collection.insert(dict(item))
+                collection.insert({k: v[0] for k, v in dict(item).items()})
                 log.msg("Book added to MongoDB database!", level=log.DEBUG, spider=spider)
                 return item
