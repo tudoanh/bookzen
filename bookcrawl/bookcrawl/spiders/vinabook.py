@@ -8,6 +8,7 @@ from scrapy.loader.processors import TakeFirst, Join
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
 
+from unidecode import unidecode
 from bookcrawl.items import BooksItem
 
 
@@ -33,9 +34,16 @@ class VinabookSpider(CrawlSpider):
     )
 
     def parse_item(self, response):
+        """
+        @url https://www.vinabook.com/lam-quen-thong-ke-hoc-qua-biem-hoa-p71348.html
+        @returns items 1
+        @scrapes name name_unidecode price description
+        @scrapes url project spider server date
+        """
         l = ItemLoader(item=BooksItem(), response=response)
 
         l.add_value('name', l.get_xpath('//*[@itemprop="title"]/text()')[-1])
+        l.add_value('name_unidecode', unidecode(l.get_xpath('//*[@itemprop="title"]/text()')[-1]))
         l.add_xpath('price', '//*[contains(@id, "discounted_price")]/span/text()', TakeFirst())
         l.add_xpath('author', '//*[@itemprop="author"]/text()')
         l.add_value('description',

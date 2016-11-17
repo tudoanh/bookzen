@@ -2,6 +2,7 @@
 /scrapy.iml
 *.pyc
 *.json
+*.log
 *.swp
 _trial_temp*
 dropin.cache

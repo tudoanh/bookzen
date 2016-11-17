@@ -8,6 +8,8 @@ import re
 from scrapy.loader import ItemLoader
 from scrapy.loader.processors import TakeFirst, MapCompose, Join
 from scrapy.http import Request
+
+from unidecode import unidecode
 from bookcrawl.items import BooksItem
 
 
@@ -47,9 +49,16 @@ class TikiSpider(scrapy.Spider):
             yield Request(url, callback=self.parse_item)
 
     def parse_item(self, response):
+        """
+        @url https://tiki.vn/hieu-ng-canh-buom-p146105.html
+        @returns items 1
+        @scrapes name name_unidecode price description
+        @scrapes url project spider server date
+        """
         l = ItemLoader(item=BooksItem(), response=response)
 
         l.add_xpath('name', '//*[@class="item-name"]/text()', MapCompose(unicode.strip, unicode.title))
+        l.add_xpath('name_unidecode', '//*[@class="item-name"]/text()', MapCompose(unidecode, str.strip, str.title))
         l.add_xpath('author', '//*[@class="item-brand"]/p/a/text()')
         l.add_xpath('price', '//*[@id="span-price"]/text()', TakeFirst(), re=r'\d+\.\d+')
         l.add_value('description',

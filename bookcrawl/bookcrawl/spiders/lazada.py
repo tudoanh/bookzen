@@ -7,6 +7,8 @@ from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy.loader import ItemLoader
 from scrapy.loader.processors import MapCompose
+
+from unidecode import unidecode
 from bookcrawl.items import BooksItem
 
 
@@ -37,9 +39,16 @@ class LazadaSpider(CrawlSpider):
     )
 
     def parse_item(self, response):
+        """
+        @url http://www.lazada.vn/harry-potter-t3-harry-potter-va-ten-tu-nhan-nguc-azkaban-tai-ban-2013-j-k-rowling-bia-mem-2226905.html
+        @returns items 1
+        @scrapes name name_unidecode price description
+        @scrapes url project spider server date
+        """
         l = ItemLoader(item=BooksItem(), response=response)
 
         l.add_xpath('name', '//*[@id="prod_title"]/text()', MapCompose(unicode.strip, unicode.title))
+        l.add_xpath('name_unidecode', '//*[@id="prod_title"]/text()', MapCompose(unidecode, str.strip, str.title))
         l.add_xpath('price', '//*[@id="special_price_box"]/text()')
         l.add_value('description',
                     re.sub('<[^<]+?>', '', l.get_xpath('//*[@class="product-description__block"]')[0]).strip())

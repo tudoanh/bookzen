@@ -1,8 +1,8 @@
 import logging
 from twisted.internet import reactor
-from scrapy import signals
 from scrapy.crawler import CrawlerRunner
 from scrapy.utils.log import configure_logging
+from scrapy.utils.project import get_project_settings
 
 from bookcrawl.spiders.tiki import TikiSpider
 from bookcrawl.spiders.lazada import LazadaSpider
@@ -12,12 +12,11 @@ configure_logging(install_root_handler=False)
 logging.basicConfig(
     filename='crawl.log',
     format='%(levelname)s: %(message)s',
-    level=logging.INFO
+    level=logging.WARNING
 )
-logger = logging.getLogger(__name__)
 
 
-runner = CrawlerRunner()
+runner = CrawlerRunner(get_project_settings())
 runner.crawl(TikiSpider)
 runner.crawl(LazadaSpider)
 runner.crawl(VinabookSpider)
