@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="container">
+    <div class="row">
+        <div class="center-align">
+            <h2 style="font-family: Lato">Bookzen</h2>
+        </div>
+        <form class="col s8 offset-s2" method="POST" action="/">
+            {{ form.csrf_token }}
+            <div class="row">
+                {{ form.search(id="search", type="text", placeholder="Book name, keywords v.v...", class="input-field col s8 offset-s2") }}
+                </div>
+                <div class="col s2 offset-s5">
+                    <button class="btn waves-effect waves-light" type="submit">Submit
+                        <i class="material-icons right">send</i>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+        <div class="row">
+            {% for book in books %}
+            <div class="col s12 m10 offset-m1 l8 offset-l2">
+                <div class="card horizontal">
+                    <div class="card-image">
+                        <img src="{{ book.image_uri }}" style="width: 300px; height: auto">
+                    </div>
+                    <div class="card-stacked">
+                        <div class="card-content">
+                            <h5>{{ book.name }}</h5>
+                            <b>{{ book.price }} ₫</b>
+                            <ul class="collapsible" data-collapsible="accordion">
+                                <li>
+                                    <div class="collapsible-header"><i class="material-icons">filter_drama</i>
+                                        <p>Description</p>
+                                    </div>
+                                    <div class="collapsible-body">
+                                        <p>
+                                            {% for line in book.description.splitlines() %}
+                                                {{line}}<br>
+                                            {% endfor %}
+                                        </p>
+                                    </div>
+                                </li>
+                                <li>
+                                </li>
+                                <li></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

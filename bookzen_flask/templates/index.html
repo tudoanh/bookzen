@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row">
+    <div class="center-align">
+        <h2 style="font-family: Lato">Bookzen</h2>
+    </div>
+    <form class="col s8 offset-s2" method="POST" action="/">
+        {{ form.csrf_token }}
+        <div class="row">
+            {{ form.search(id="search", type="text", placeholder="Book name, keywords v.v...", class="input-field col s8 offset-s2") }}
+            </div>
+            <div class="col s2 offset-s5">
+                <button class="btn waves-effect waves-light" type="submit">Submit
+                    <i class="material-icons right">send</i>
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}
