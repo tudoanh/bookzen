@@ -56,7 +56,6 @@ def index():
 
 @app.route('/search/<keyword>')
 def search(keyword):
-    print(keyword)
     form = SearchForm()
     if form.validate_on_submit():
         keyword = form.search.data
