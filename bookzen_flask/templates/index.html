@@ -1,20 +1,28 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="row">
-    <div class="center-align">
-        <h2 style="font-family: Lato">Bookzen</h2>
-    </div>
-    <form class="col s8 offset-s2" method="POST" action="/">
-        {{ form.csrf_token }}
-        <div class="row">
-            {{ form.search(id="search", type="text", placeholder="Book name, keywords v.v...", class="input-field col s8 offset-s2") }}
-            </div>
-            <div class="col s2 offset-s5">
-                <button class="btn waves-effect waves-light" type="submit">Submit
-                    <i class="material-icons right">send</i>
-                </button>
+    <section class="hero is-large">
+        <div class="hero-body">
+            <div class="container has-text-centered">
+                <h1 class="title">
+                    Bookzen
+                </h1>
+                <h2 class="subtitle">
+                    Find best price for your favorite books
+                </h2>
+                <form class="control" method="POST">
+                    <div class="columns is-mobile">
+                        <div class="column is-8-desktop is-offset-2-desktop">
+                            {{ form.csrf_token }}
+                            {{ form.search(id="search", type="text", placeholder="Book name, keywords etc...", class="input is-primary is-medium") }}
+                        </div>
+                    </div>
+                    <div class="columns is-mobile">
+                        <div class="column is-2-desktop is-offset-5-desktop has-text-centered">
+                            <button class="button is-primary is-medium" type="submit">Search</button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
-    </form>
-</div>
+    </section>
 {% endblock %}

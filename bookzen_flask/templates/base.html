@@ -4,25 +4,73 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="description" content="">
-        <title>Bookzen - Find best pricing for books online</title>
+        <title>{% block title %}Bookzen - Find best pricing for books online{% endblock %}</title>
         <!-- Compiled and minified CSS -->
-        <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/materialize.min.css') }}">
-
-        <!-- Compiled and minified JavaScript -->
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script>
-
-        <!--Import Google Icon Font-->
-        <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
+        <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/bulma.css') }}">
+        <!-- Font Awesome -->
+        <script src="https://use.fontawesome.com/f2387c31c7.js"></script>
         <!--Let browser know website is optimized for mobile-->
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     </head>
-
     <body>
-        <!--Import jQuery before materialize.js-->
-        <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-        <script type="text/javascript" src=" {{ url_for('static', filename='js/materialize.min.js') }}"></script>
-        {% block content %}
+        <nav class="nav">
+            <div class="container">
+                <div class="nav-left">
+                    <a class="nav-item is-brand" href="/">
+                        <h1 class="title is-3">BOOKZEN</h1>
+                    </a>
+                </div>
+
+                <div class="nav-center">
+                    <a class="nav-item" href="https://github.com/tudoanh/bookzen">
+                        <span class="icon">
+                            <i class="fa fa-github"></i>
+                        </span>
+                    </a>
+                    <a class="nav-item" href="#">
+                        <span class="icon">
+                            <i class="fa fa-twitter"></i>
+                        </span>
+                    </a>
+                </div>
+
+                <span id="nav-toggle" class="nav-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </span>
+
+                <div id="nav-menu" class="nav-right nav-menu">
+                    <a class="nav-item" href="#">
+                        /about
+                    </a>
+                    <a class="nav-item" href="#">
+                        /blog
+                    </a>
+                    <a class="nav-item" href="#">
+                        /contact
+                    </a>
+                </div>
+            </div>
+        </nav>
+
+        {% block content %}{% endblock %}
+
+        {% block footer %}
+        </footer>
         {% endblock %}
+
+        <script type="text/javascript">
+            document.getElementById("nav-toggle").addEventListener ("click", toggleNav);
+            function toggleNav() {
+                var nav = document.getElementById("nav-menu");
+                var className = nav.getAttribute("class");
+                if(className == "nav-right nav-menu") {
+                    nav.className = "nav-right nav-menu is-active";
+                } else {
+                    nav.className = "nav-right nav-menu";
+                }
+            }
+        </script>
     </body>
 </html>
