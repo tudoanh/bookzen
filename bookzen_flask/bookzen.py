@@ -92,7 +92,7 @@ def contact():
         msg['From'] = formataddr((str(Header(form.name.data, 'utf-8')), fromaddr))
         msg['To'] = toaddr
         body = form.message.data
-        msg.attach(MIMEText(body, 'plain'))
+        msg.attach(MIMEText(body, 'plain', 'utf-8'))
 
         server = smtplib.SMTP('smtp.gmail.com', 587)
         server.starttls()
