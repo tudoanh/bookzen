@@ -43,7 +43,7 @@ class MongoPipeline(object):
                 is_valid = False
                 raise DropItem("Missing %s!" % data)
         if is_valid:
-            if collection.find({'name': item['name'], 'spider': spider.name}).count() != 0:
+            if collection.find({'name_unidecode': item['name_unidecode'], 'spider': spider.name}).count() != 0:
                 raise DropItem("Item existed")
             else:
                 collection.insert({k: v[0] for k, v in dict(item).items()})
