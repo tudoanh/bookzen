@@ -6,7 +6,7 @@ from email.mime.text import MIMEText
 from email.utils import formataddr
 import smtplib
 
-from flask import Flask, render_template, redirect, url_for, session
+from flask import Flask, render_template, redirect, url_for
 from flask_wtf import FlaskForm as Form
 
 from flask_mongoengine import MongoEngine
@@ -71,9 +71,9 @@ def index():
 def search(keyword):
     form = SearchForm()
     if form.validate_on_submit():
-        session['keyword'] = form.search.data
-        return redirect(url_for('search', keyword=session.get('keyword')))
-    query = Books.objects.search_text(str_handler(session.get('keyword')))
+        keyword = form.search.data
+        return redirect(url_for('search', keyword=keyword))
+    query = Books.objects.search_text(str_handler(keyword))
     books = [dict(json.loads(i.to_json())) for i in query.order_by('+price')]
     if books:
         return render_template('results.html', form=form, books=books)
