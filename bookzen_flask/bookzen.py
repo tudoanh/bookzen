@@ -88,9 +88,10 @@ def contact():
         msg = MIMEMultipart()
         fromaddr = form.email.data
         toaddr = app.config["MY_EMAIL_ADDRESS"]
-        msg['Subject'] = form.subject.data
-        msg['From'] = formataddr((str(Header(form.name.data, 'utf-8')), fromaddr))
-        msg['To'] = toaddr
+        msg['subject'] = form.subject.data
+        msg['from'] = formataddr((str(Header(form.name.data, 'utf-8')), fromaddr))
+        msg['to'] = toaddr
+        msg['reply-to'] = fromaddr
         body = form.message.data
         msg.attach(MIMEText(body, 'plain', 'utf-8'))
 
