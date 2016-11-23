@@ -1,14 +1,17 @@
 # -*- coding: iso-8859-15 -*-
-
 import json
-import unicodedata
+from email.header import Header
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.utils import formataddr
+import smtplib
 
-from flask import Flask, render_template, redirect, url_for
+from flask import Flask, render_template, redirect, url_for, session
 from flask_wtf import FlaskForm as Form
 
 from flask_mongoengine import MongoEngine
-from wtforms import StringField, SubmitField
-from wtforms.validators import DataRequired
+from wtforms import StringField, SubmitField, TextAreaField
+from wtforms.validators import DataRequired, Email
 
 app = Flask(__name__)
 app.config.from_pyfile('settings.py')
@@ -33,8 +36,18 @@ class Books(db.Document):
 
 
 class SearchForm(Form):
-    search = StringField("Search book\'s title", validators=[DataRequired()])
-    submit = SubmitField("Find")
+    flash_msg = "Please search something so we can serve you"
+    search = StringField("Search book\'s title", validators=[DataRequired(flash_msg)])
+    submit = SubmitField()
+
+
+class ContactForm(Form):
+    flash_msg = "Oops, look like you forget to fill this field."
+    name = StringField("Name", [DataRequired(flash_msg)])
+    email = StringField("Email", [Email(flash_msg)])
+    subject = StringField("Subject", [DataRequired(flash_msg)])
+    message = TextAreaField("Message", [DataRequired(flash_msg)])
+    submit = SubmitField()
 
 
 def str_handler(string):
@@ -58,9 +71,9 @@ def index():
 def search(keyword):
     form = SearchForm()
     if form.validate_on_submit():
-        keyword = form.search.data
-        return redirect(url_for('search', keyword=keyword))
-    query = Books.objects.search_text(str_handler(keyword))
+        session['keyword'] = form.search.data
+        return redirect(url_for('search', keyword=session.get('keyword')))
+    query = Books.objects.search_text(str_handler(session.get('keyword')))
     books = [dict(json.loads(i.to_json())) for i in query.order_by('+price')]
     if books:
         return render_template('results.html', form=form, books=books)
@@ -68,9 +81,28 @@ def search(keyword):
         return render_template('not_found.html', form=form)
 
 
-@app.route('/contact')
+@app.route('/contact', methods=["GET", "POST"])
 def contact():
-    pass
+    form = ContactForm()
+    if form.validate_on_submit():
+        msg = MIMEMultipart()
+        fromaddr = form.email.data
+        toaddr = app.config["MY_EMAIL_ADDRESS"]
+        msg['Subject'] = form.subject.data
+        msg['From'] = formataddr((str(Header(form.name.data, 'utf-8')), fromaddr))
+        msg['To'] = toaddr
+        body = form.message.data
+        msg.attach(MIMEText(body, 'plain'))
+
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.starttls()
+        server.login(app.config['EMAIL_ACCOUNT'], app.config["EMAIL_PASSWORD"])
+        text = msg.as_string()
+        server.sendmail(fromaddr, toaddr, text)
+        server.quit()
+        return render_template('thanks.html')
+    else:
+        return render_template('contact.html', form=form)
 
 
 if __name__ == "__main__":

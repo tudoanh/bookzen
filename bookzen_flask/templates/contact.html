@@ -1,3 +1,63 @@
 {% extends "base.html" %}
 {% block content %}
+<div class="container">
+    <div class="columns">
+        <div class="column is-12"></div>
+    </div>
+    <div class="columns">
+        <div class="column is-12"></div>
+    </div>
+    <div class="columns">
+        <div class="column is-12"></div>
+    </div>
+    <div class="columns">
+    <div class="column is-12 has-text-centered">
+        <h2 class="title">Contact</h2>
+        <h3 class="subtitle">Fill form below to contact with me</h3>
+    </div>
+    </div>
+    <div class="columns">
+    <div class="column is-10 is-offset-1">
+        <div class="box">
+            <form action="{{ url_for("contact") }}" method="POST">
+                {{ form.csrf_token }}
+                <label class="label">Name</label>
+                <p class="control has-icon">
+                    {{ form.name(type="text", placeholder="Your name", class="input is-medium") }}
+                    {% for msg in form.name.errors %}
+                    <span class="help is-danger">{{ msg }}</span>
+                    {% endfor %}
+                    <i class="fa fa-user" aria-hidden="true"></i>
+                </p>
+                <label class="label">Email</label>
+                <p class="control has-icon">
+                    {{ form.email(type="text", placeholder="Your email", class="input is-medium") }}
+                    {% for msg in form.email.errors %}
+                    <span class="help is-danger">{{ msg }}</span>
+                    {% endfor %}
+                    <i class="fa fa-envelope"></i>
+                </p>
+                <label class="label">Subject</label>
+                <p class="control has-icon">
+                    {{ form.subject(type="text", placeholder="Subject", class="input is-medium") }}
+                    {% for msg in form.subject.errors %}
+                    <span class="help is-danger">{{ msg }}</span>
+                    {% endfor %}
+                    <i class="fa fa-envelope"></i>
+                </p>
+                <label class="label">Message</label>
+                <p class="control">
+                    {{ form.message(placeholder="Your message", class="textarea is-medium") }}
+                    {% for msg in form.message.errors %}
+                    <span class="help is-danger">{{ msg }}</span>
+                    {% endfor %}
+                </p>
+                <p class="control">
+                    {{ form.submit(class="button is-primary is-medium") }}
+                </p>
+            </form>
+        </div>
+    </div>
+    </div>
+</div>
 {% endblock %}
