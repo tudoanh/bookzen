@@ -62,7 +62,15 @@ def search(keyword):
         return redirect(url_for('search', keyword=keyword))
     query = Books.objects.search_text(str_handler(keyword))
     books = [dict(json.loads(i.to_json())) for i in query.order_by('+price')]
-    return render_template('results.html', form=form, books=books)
+    if books:
+        return render_template('results.html', form=form, books=books)
+    else:
+        return render_template('not_found.html', form=form)
+
+
+@app.route('/contact')
+def contact():
+    pass
 
 
 if __name__ == "__main__":

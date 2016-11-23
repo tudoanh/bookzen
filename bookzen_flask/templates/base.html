@@ -17,7 +17,7 @@
         <nav class="nav">
             <div class="container">
                 <div class="nav-left">
-                    <a class="nav-item is-brand" href="/">
+                    <a class="nav-item is-brand" href="{{ url_for("index") }}">
                         <h1 class="title is-3">BOOKZEN</h1>
                     </a>
                 </div>
@@ -45,10 +45,10 @@
                     <a class="nav-item" href="#">
                         /about
                     </a>
-                    <a class="nav-item" href="#">
+                    <a class="nav-item" href="">
                         /blog
                     </a>
-                    <a class="nav-item" href="#">
+                    <a class="nav-item" href="{{ url_for("contact") }}">
                         /contact
                     </a>
                 </div>
