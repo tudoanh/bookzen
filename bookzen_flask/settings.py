@@ -7,6 +7,6 @@ MONGODB_SETTINGS = {
 WTF_CSRF_ENABLED = True
 SECRET_KEY = os.environ.get("SECRET_KEY", "Ringa Linga")
 
-MY_EMAIL_ADDRESS = str(os.environ.get("MY_EMAIL_ADDRESS", ""))
-EMAIL_ACCOUNT = str(os.environ.get("EMAIL_ACCOUNT", ""))
-EMAIL_PASSWORD = str(os.environ.get("EMAIL_PASSWORD", ""))
+MY_EMAIL_ADDRESS = "youremail@gmail.com"
+EMAIL_ACCOUNT = "Gmailaccount"
+EMAIL_PASSWORD = "Gmailpass"

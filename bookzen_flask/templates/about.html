@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="hero has-text-centered">
+<div class="hero-body">
+    <h1 class="title is-medium">About Bookzen</h1>
+</div>
+</section>
+<div class="container">
+    <div class="tile is-ancestor">
+        <div class="tile is-6 is-parent">
+            <div class="tile is-child box">
+                <p class="title">Vietnamese</p>
+                <div class="content">
+                    <p>Bookzen là một project nhằm giúp những người yêu thích sách tìm được nơi mua sách giá tốt nhất online.</p>
+                    <p>
+                        Bookzen được viết hoàn toàn bởi Python với Scrapy để crawl dữ liệu sách và Flask làm framework chính cho website.
+                    </p>
+                    <p>
+                        Giao diện(front-end) được thiết kế một cách đơn giản nhất và nhẹ nhất nhằm mang lại trải nghiệm tối ưu dành cho người sử dụng. Thay vì Bootstrap thì Bookzen sử dụng <a href="http://bulma.io">Bulma.io</a>, một framework mới dựa trên Flexbox của Mozilla.
+                    </p>
+                    <p>
+                        Bookzen sử dụng MongoDB làm database chính và sử dụng SQLite3 làm database cho blog.
+                    </p>
+                    <p>
+                        Danh sách các địa chỉ mua bán sách online hiện đã có trong database của Bookzen:
+                        <ul>
+                            <li>Tiki</li>
+                            <li>Lazada</li>
+                            <li>Vinabook</li>
+                        </ul>
+                    </p>
+                    <p>
+                        Hiện Bookzen vẫn đang tiếp tục cập nhập cơ sở dữ liệu, sẽ được thông báo chi tiết hơn về kỹ thuật cũng như tiến độ trên <a href="{{ url_for("blog") }}">blog</a> của mình.
+                    </p>
+                    <p>
+                        Mọi đóng góp về tính năng cũng như nâng cấp về source code có thể tham gia tại <a href="https://github.com/tudoanh/bookzen">Github của Bookzen</a>.
+                    </p>
+                    <p>
+                        Để liên hệ, xin vui lòng truy cập <a href="{{ url_for("contact") }}">/contact</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="tile is-6 is-parent">
+            <div class="tile is-child box">
+                <p class="title">English</p>
+                <div class="content">
+                    <p>
+                        Bookzen is a project that help "book worm" find where to buy favorite books with best price.
+                    </p>
+                    <p>
+                        Bookzen is writen in Python, with Scrapy for data-crawling and Flask for website framework.
+                    </p>
+                    <p>
+                        Front-end is using <a href="http://bulma.io">Bulma.io</a> instead of Bootstrap for speed and light-weight experience for users. Bulma use Flexbox of Mozilla as main grid system, without Javascript in it.
+                    </p>
+                    <p>
+                        MongoDB is using as main database for books, and SQLite3 is using for Blogging.
+                    </p>
+                    <p>
+                        List site are already crawled for book data:
+                        <ul>
+                            <li>Tiki</li>
+                            <li>Lazada</li>
+                            <li>Vinabook</li>
+                        </ul>
+                    </p>
+                    <p>
+                    ... and still have more. Bookzen will update it process and schedule on <a href="{{ url_for("blog") }}">/blog</a>.
+                    </p>
+                    <p>
+                    All contribute of source code, please go to <a href="https://github.com/tudoanh/bookzen">Bookzen's github page</a>.
+                    </p>
+                    <p>
+                    For contact, please go to <a href="{{ url_for("contact") }}">/contact</a>.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="tile is-ancestor">
+        <div class="tile is-parent is-vertical is-12">
+            <div class="tile is-child box">
+                <p class="title">Author</p>
+                <div class="columns">
+                <div class="column is-6">
+                    <blockquote class="embedly-card" data-card-key="6e3236f32c024d07b2623e5e94c04dca" data-card-controls="0" data-card-branding="0" data-card-type="article" data-card-align="left"><h4><a href="https://www.linkedin.com/in/doanhtu">Do Anh Tu | LinkedIn</a></h4><p>Web Developer</p></blockquote>
+                    <script async src="//cdn.embedly.com/widgets/platform.js" charset="UTF-8"></script>
+                </div>
+                <div class="column is-6">
+                    <div class="content">
+                        <p>Author: Do Anh Tu</p>
+                        <p>Profile/CV: <a href="https://tudoanh.github.io">https://tudoanh.github.io</a></p>
+                        <span class="icon is-medium">
+                            <a href="https://github.com/tudoanh">
+                                <i class="fa fa-github" aria-hidden="true"></i>
+                            </a>
+                        </span>
+                        <span class="icon is-medium">
+                            <a href="https://facebook.com/tu0703">
+                                <i class="fa fa-facebook-square" aria-hidden="true"></i>
+                            </a>
+                        </span>
+                        <span class="icon is-medium">
+                            <a href="mailto:tu0703@gmail.com">
+                                <i class="fa fa-envelope" aria-hidden="true"></i>
+                            </a>
+                        </span>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

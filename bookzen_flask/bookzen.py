@@ -7,9 +7,9 @@ from email.utils import formataddr
 import smtplib
 
 from flask import Flask, render_template, redirect, url_for
-from flask_wtf import FlaskForm as Form
 
 from flask_mongoengine import MongoEngine
+from flask_wtf import FlaskForm as Form
 from wtforms import StringField, SubmitField, TextAreaField
 from wtforms.validators import DataRequired, Email
 
@@ -19,20 +19,20 @@ db = MongoEngine(app)
 
 
 class Books(db.Document):
-        name = db.StringField()
-        name_unidecode = db.StringField()
-        author = db.StringField()
-        description = db.StringField()
-        image_uri = db.StringField()
-        price = db.StringField()
-        url = db.StringField()
-        spider = db.StringField()
-        server = db.StringField()
-        project = db.StringField()
-        date = db.DateTimeField()
+    name = db.StringField()
+    name_unidecode = db.StringField()
+    author = db.StringField()
+    description = db.StringField()
+    image_uri = db.StringField()
+    price = db.StringField()
+    url = db.StringField()
+    spider = db.StringField()
+    server = db.StringField()
+    project = db.StringField()
+    date = db.DateTimeField()
 
-        meta = {'indexes': [
-            {'fields': ['$name', "$name_unidecode"]}]}
+    meta = {'indexes': [
+        {'fields': ['$name', "$name_unidecode"]}]}
 
 
 class SearchForm(Form):
@@ -81,7 +81,7 @@ def search(keyword):
         return render_template('not_found.html', form=form)
 
 
-@app.route('/contact', methods=["GET", "POST"])
+@app.route('/contact/', methods=["GET", "POST"])
 def contact():
     form = ContactForm()
     if form.validate_on_submit():
@@ -105,6 +105,15 @@ def contact():
     else:
         return render_template('contact.html', form=form)
 
+
+@app.route('/about/')
+def about():
+    return render_template('about.html')
+
+
+@app.route('/blog')
+def blog():
+    pass
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', debug=True)
