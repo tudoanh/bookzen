@@ -1,4 +1,10 @@
 {% extends "base.html" %}
+{% block meta %}
+<meta property="og:type"          content="website" />
+<meta property="og:url"           content="{{ request.url }}" />
+{% endblock %}
+{% block des %}{% for book in books %}{% if loop.first %}Giá hời nhất được tìm thấy cho {{ book.name }} là {{ book.price }} tại nhà sách {{ book.spider|title }} - Bookzen{% endif %}{% endfor %}{% endblock %}
+{% block title %}Tìm mức giá tốt nhất của sách {% for book in books %}{% if loop.first %}{{ book.name }}{% endif %}{% endfor %} | Bookzen{% endblock %}
 {% block content %}
 <div class="container has-text-centered">
     <h1 class="title">
@@ -50,5 +56,17 @@
         </div>
     {% endfor %}
     </div>
+    <div class="fb-share-button" data-href="{{ request.url }}" data-layout="button_count" data-size="large" data-mobile_iframe="true">
+    </div>
 </div>
+{% endblock %}
+{% block js %}
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v2.8&appId=248869275530330";
+          fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
 {% endblock %}
