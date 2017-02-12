@@ -3,7 +3,6 @@ import datetime
 import socket
 import re
 
-import scrapy
 from scrapy.loader import ItemLoader
 from scrapy.loader.processors import TakeFirst, Join
 from scrapy.linkextractors import LinkExtractor
@@ -50,7 +49,7 @@ class FahasaSpider(CrawlSpider):
         l.add_xpath('price', '//*[@class="price-box"]/p[1]/span[2]/text()', TakeFirst(), re=r'\d+\.\d+')
         l.add_value('description',
                     filter(None,
-                        [re.sub('<[^<]+?>', '', i) for i in l.get_xpath('//*[@class="std"]')]),
+                           [re.sub('<[^<]+?>', '', i) for i in l.get_xpath('//*[@class="std"]')]),
                     Join('\n'))
         l.add_xpath('image_uri', '//*[@id="image"]/@src')
 

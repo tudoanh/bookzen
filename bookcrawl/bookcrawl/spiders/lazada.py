@@ -40,7 +40,7 @@ class LazadaSpider(CrawlSpider):
 
     def parse_item(self, response):
         """
-        @url http://www.lazada.vn/harry-potter-t3-harry-potter-va-ten-tu-nhan-nguc-azkaban-tai-ban-2013-j-k-rowling-bia-mem-2226905.html
+        @url http://www.lazada.vn/hoa-tu-dan-tai-ban-co-bo-sung-2323659.html
         @returns items 1
         @scrapes name name_unidecode price description
         @scrapes url project spider server date
