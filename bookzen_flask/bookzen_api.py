@@ -44,7 +44,7 @@ class BooksListAPI(Resource):
         query_args = {'keyword': keyword, 'per_page': per_page}
 
         # Paginate logic
-        if len(books) == 0:
+        if len(books) == 0 or len(query.items) == 0:
             abort(404, message="Can not found any book with keyword: {}".format(args.get("keyword")))
         elif query.has_next is True and query.has_prev is False:
             query_args['page'] = query.next_num
