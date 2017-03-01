@@ -10,6 +10,8 @@ api = Api(app)
 
 _version = 'v1.0'
 
+extends_header = {'Access-Control-Allow-Origin': '*'}
+
 resource_fields = {
         'name': fields.String,
         'name_unidecode': fields.String,
@@ -48,15 +50,15 @@ class BooksListAPI(Resource):
             abort(404, message="Can not found any book with keyword: {}".format(args.get("keyword")))
         elif query.has_next is True and query.has_prev is False:
             query_args['page'] = query.next_num
-            return {'books': books, 'next': url_for('books', **query_args), 'previous': ''}
+            return {'books': books, 'next': url_for('books', **query_args), 'previous': ''}, extends_header
         elif query.has_next is False and query.has_prev is True:
             query_args['page'] = query.next_num
-            return {'books': books, 'next': '', 'previous': url_for('books', **query_args)}
+            return {'books': books, 'next': '', 'previous': url_for('books', **query_args)}, extends_header
         elif query.has_next is True and query.has_prev is True:
             return {'books': books, 'next': url_for('books', page=query.next_num, **query_args),
-                    'previous': url_for('books', page=query.prev_num, **query_args)}
+                    'previous': url_for('books', page=query.prev_num, **query_args)}, extends_header
         else:
-            return {'books': books, 'next': '', 'previous': ''}
+            return {'books': books, 'next': '', 'previous': ''}, extends_header
 
 
 api.add_resource(BooksListAPI, '/bookzen/api/{0}/books'.format(_version), endpoint='books')
