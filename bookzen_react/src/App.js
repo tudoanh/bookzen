@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
+import Truncate from 'react-truncate';
 import './App.css';
-
 const DEFAULT_QUERY = '';
 const DEFAULT_PAGE = 1
 const DEFAULT_HPP = '12'
@@ -10,6 +10,8 @@ const PATH_SEARCH = '/books';
 const PARAM_SEARCH = 'keyword=';
 const PARAM_PAGE = 'page='
 const PARAM_HPP = 'per_page='
+
+var unidecode = require('unidecode');
 
 class App extends Component {
   constructor(props){
@@ -51,7 +53,7 @@ class App extends Component {
   }
 
   fetchSearchBooks(searchTerm, page){
-      fetch(`${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchTerm}&${PARAM_PAGE}${page}&${PARAM_HPP}${DEFAULT_HPP}`)
+      fetch(`${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${unidecode(searchTerm)}&${PARAM_PAGE}${page}&${PARAM_HPP}${DEFAULT_HPP}`)
       .then(response => response.json())
       .then(result => this.setSearchBooks(result))
   }
@@ -79,7 +81,7 @@ class App extends Component {
     const { searchTerm, results, searchKey, data } = this.state
     const page = (results && results[searchKey] && results[searchKey].page) || 0
     const list = (results && results[searchKey] && results[searchKey].books) || []
-    console.log(results)
+
     return (
       <div key={ results.id } className="App">
         <NavBar />
@@ -96,7 +98,7 @@ class App extends Component {
             onSubmit={this.onSearchSubmit}
             onChange={this.onSearchChange}
             >
-            Search
+            Tìm với Bookzen
             </Search>
           }
         <div className="columns">
@@ -130,7 +132,7 @@ const Index = ({ onSubmit, value, onChange, children }) => {
           onSubmit={onSubmit}
           onChange={onChange}
           >
-          Search
+          Tìm với Bookzen
         </Search>
       </div>
     </section>
@@ -172,7 +174,7 @@ const BookList = ({ list }) => {
                     <div className="media">
                       <div className="media-content">
                           <a href={ book.url } rel="nofollow" target="_blank">
-                              <p className="title is-5">{ book.name }</p>
+                              <p data-balloon={book.name} data-balloon-pos="up" className="title is-5"><Truncate lines={3}>{ book.name }</Truncate></p>
                           </a>
                           <p className="subtitle is-6">{ book.website } - { book.price }</p>
                       </div>
@@ -260,10 +262,10 @@ const NavBar = () => {
                 </span>
 
                 <div id="nav-menu" className="nav-right nav-menu">
-                    <a className="nav-item" href="https://medium.com/@doanhtu">
+                    <a className="nav-item" href="https://medium.com/@doanhtu" target="_blank">
                         /blog
                     </a>
-                    <a className="nav-item" href="">
+                    <a className="nav-item" href="https://tudoanh.typeform.com/to/BsA7mv" target="_blank">
                         /contact
                     </a>
                 </div>
@@ -273,3 +275,4 @@ const NavBar = () => {
 }
 
 export default App;
+export { Search, Index }
