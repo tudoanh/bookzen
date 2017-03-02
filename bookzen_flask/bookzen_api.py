@@ -79,7 +79,8 @@ class BooksListAPI(Resource):
                                      'previous': url_for('books', page=query.prev_num, **query_args)},
                     more_info), extends_header
         else:
-            return {'books': books, 'next': '', 'previous': ''}, extends_header
+            return merge_two_dicts({'books': books, 'next': '', 'previous': ''},
+                                   more_info), extends_header
 
 
 api.add_resource(BooksListAPI, '/bookzen/api/{0}/books'.format(_version), endpoint='books')
