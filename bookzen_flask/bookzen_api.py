@@ -1,12 +1,14 @@
 import json
 
 from flask import url_for
+from flask_cors import CORS
 from flask_restful import abort, reqparse, Resource, Api, fields, marshal
 
 from bookzen import app, Books, str_handler
 
 
 api = Api(app)
+CORS(app)
 
 _version = 'v1.0'
 
@@ -62,7 +64,7 @@ class BooksListAPI(Resource):
 
         # Paginate logic
         if len(books) == 0 or len(query.items) == 0:
-            abort(404, message="Can not found any book with keyword: {}".format(args.get("keyword")))
+            abort(404, extends_header, message="Can not found any book with keyword: {}".format(args.get("keyword")),)
         elif query.has_next is True and query.has_prev is False:
             query_args['page'] = query.next_num
             return merge_two_dicts(

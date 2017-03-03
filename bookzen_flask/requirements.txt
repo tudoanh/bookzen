@@ -6,10 +6,11 @@
 #
 aniso8601==1.2.0          # via flask-restful
 click==6.6                # via flask
+flask-cors==3.0.2
 flask-mongoengine==0.8
 flask-restful==0.3.5
 flask-wtf==0.13.1         # via flask-mongoengine
-flask==0.11.1             # via flask-mongoengine, flask-restful, flask-wtf
+flask==0.11.1             # via flask-cors, flask-mongoengine, flask-restful, flask-wtf
 itsdangerous==0.24        # via flask
 jinja2==2.8               # via flask
 markupsafe==0.23          # via jinja2
@@ -17,6 +18,6 @@ mongoengine==0.10.6       # via flask-mongoengine
 pymongo==3.3.1            # via mongoengine
 python-dateutil==2.6.0    # via aniso8601
 pytz==2016.10             # via flask-restful
-six==1.10.0               # via flask-restful, python-dateutil
+six==1.10.0               # via flask-cors, flask-restful, python-dateutil
 werkzeug==0.11.11         # via flask, flask-wtf
 wtforms==2.1              # via flask-wtf

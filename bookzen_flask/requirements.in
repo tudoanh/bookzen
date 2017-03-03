@@ -1,2 +1,3 @@
 flask-restful
 flask-mongoengine
+flask-cors
