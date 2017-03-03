@@ -5,7 +5,7 @@ const DEFAULT_QUERY = '';
 const DEFAULT_PAGE = 1
 const DEFAULT_HPP = '12'
 
-const PATH_BASE = 'http://bookzen.top/bookzen/api/v1.0';
+const PATH_BASE = 'https://bookzen.top/bookzen/api/v1.0';
 const PATH_SEARCH = '/books';
 const PARAM_SEARCH = 'keyword=';
 const PARAM_PAGE = 'page='
