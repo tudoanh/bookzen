@@ -7,6 +7,7 @@ from flask_restful import abort, reqparse, Resource, Api, fields, marshal
 from bookzen import app, Books, str_handler
 
 
+app.config['ERROR_404_HELP'] = False
 api = Api(app)
 CORS(app)
 
