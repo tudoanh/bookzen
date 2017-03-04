@@ -35,7 +35,7 @@ class BooksListAPI(Resource):
     def get(self):
         # See more at http://flask-restful-cn.readthedocs.io/en/0.3.5/reqparse.html
         parser = reqparse.RequestParser(bundle_errors=True)
-        parser.add_argument('keyword', type=str, help="Bad argument: {error_msg}",
+        parser.add_argument('keyword', type=str, help="Book name or author, can not emty",
                             required=True)
         parser.add_argument('page', type=int, default=1)
         parser.add_argument('per_page', type=int, default=12)
