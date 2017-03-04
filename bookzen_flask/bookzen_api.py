@@ -36,11 +36,11 @@ def merge_two_dicts(x, y):
 class BooksListAPI(Resource):
     def get(self):
         # See more at http://flask-restful-cn.readthedocs.io/en/0.3.5/reqparse.html
-        parser = reqparse.RequestParser()
-        parser.add_argument('keyword', type=str, help="Name of book you want to find",
+        parser = reqparse.RequestParser(bundle_errors=True)
+        parser.add_argument('keyword', type=str, help="Bad argument: {error_msg}",
                             required=True)
         parser.add_argument('page', type=int, default=1)
-        parser.add_argument('per_page', type=int, default=10)
+        parser.add_argument('per_page', type=int, default=12)
         args = parser.parse_args()
 
         # Query with keyword, order by price from low to high, then
