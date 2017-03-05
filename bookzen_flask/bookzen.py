@@ -34,6 +34,9 @@ class Books(db.Document):
     meta = {'indexes': [
         {'fields': ['$name', "$name_unidecode"]}]}
 
+    def __repr__(self):
+        return "{0} - {1} - {2}".format(self.name, self.spider, self.price)
+
 
 class SearchForm(Form):
     flash_msg = "Please search something so we can serve you"
@@ -104,11 +107,6 @@ def contact():
         return render_template('thanks.html')
     else:
         return render_template('contact.html', form=form)
-
-
-@app.route('/about/')
-def about():
-    return render_template('about.html')
 
 
 if __name__ == "__main__":

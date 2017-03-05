@@ -3,6 +3,7 @@ import json
 from flask import url_for
 from flask_cors import CORS
 from flask_restful import abort, reqparse, Resource, Api, fields, marshal
+import requests
 
 from bookzen import app, Books, str_handler
 
@@ -12,6 +13,8 @@ api = Api(app)
 CORS(app)
 
 _version = 'v1.0'
+
+INSTA_URL = "https://www.instagram.com/explore/tags/"
 
 resource_fields = {
         'id': fields.String(attribute='_id'),
@@ -25,11 +28,32 @@ resource_fields = {
         'url': fields.String}
 
 
+def keyword_to_hashtag(keyword):
+    return keyword.replace(" ", "")
+
+
 def merge_two_dicts(x, y):
     """Given two dicts, merge them into a new dict as a shallow copy."""
     z = x.copy()
     z.update(y)
     return z
+
+
+class GetInstagramFeed(Resource):
+    def get(self):
+        parser = reqparse.RequestParser(bundle_errors=True)
+        parser.add_argument('keyword', type=str, help="Book name or author, can not emty",
+                            required=True)
+        args = parser.parse_args()
+
+        keyword = keyword_to_hashtag(args.get('keyword'))
+
+        response = requests.get(INSTA_URL + keyword)
+        js = response.text.split(' = ')[-2].split(';</script>')[0]
+        data = json.loads(js)
+        feed = data['entry_data']['TagPage'][0]['tag']['media']['nodes']
+
+        return {'entries': feed}
 
 
 class BooksListAPI(Resource):
@@ -85,6 +109,7 @@ class BooksListAPI(Resource):
 
 
 api.add_resource(BooksListAPI, '/bookzen/api/{0}/books'.format(_version), endpoint='books')
+api.add_resource(GetInstagramFeed, '/bookzen/api/{0}/insta_feed'.format(_version))
 
 
 if __name__ == '__main__':
