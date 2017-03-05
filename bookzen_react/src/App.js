@@ -1,6 +1,13 @@
 import React, { Component } from 'react';
+import {
+  BrowserRouter as Router,
+  Route,
+  Link
+} from 'react-router'
 import Truncate from 'react-truncate';
 import './App.css';
+
+
 const DEFAULT_QUERY = '';
 const DEFAULT_PAGE = 1
 const DEFAULT_HPP = '12'
@@ -22,6 +29,7 @@ class App extends Component {
       results: {},
       searchTerm: DEFAULT_QUERY,
       searchKey: '',
+      isLoading: false,
     }
 
     this.needToSearchBooks = this.needToSearchBooks.bind(this)
@@ -49,7 +57,11 @@ class App extends Component {
       ...books
     ]
 
-    this.setState({ results: { ...results, [searchKey]: { books: updatedBooks, page }}, data: result })
+    this.setState({
+      results: { ...results, [searchKey]: { books: updatedBooks, page }},
+      data: result,
+      isLoading: false,
+    })
   }
 
   fetchSearchBooks(searchTerm, page){
@@ -75,10 +87,17 @@ class App extends Component {
       this.fetchSearchBooks(searchTerm, DEFAULT_PAGE)
     }
     event.preventDefault()
+    // If keyword already is cache, do not show loading button
+    if (this.state.results[searchTerm]) {
+      this.setState({ isLoading: false })
+    }
+    else {
+      this.setState({ isLoading: true })
+    }
   }
 
   render() {
-    const { searchTerm, results, searchKey, data } = this.state
+    const { searchTerm, results, searchKey, data, isLoading } = this.state
     const page = (results && results[searchKey] && results[searchKey].page) || 0
     const list = (results && results[searchKey] && results[searchKey].books) || []
 
@@ -97,6 +116,7 @@ class App extends Component {
             value={searchTerm}
             onSubmit={this.onSearchSubmit}
             onChange={this.onSearchChange}
+            isLoading={isLoading}
             >
             Tìm với Bookzen
             </Search>
@@ -139,13 +159,13 @@ const Index = ({ onSubmit, value, onChange, children }) => {
   )
 }
 
-const Pagination = ({ list, onClickNext }) => {
+const Pagination = ({ list, onClickNext, isLoading }) => {
   return (
     <div className="container has-text-centered">
       <div className="columns">
       <div className="column is-2-desktop is-offset-5-desktop is-8-mobile is-offset-2-mobile">
         <a
-          className={"button " + (!list.next ? " is-disabled" : " is-focused")}
+          className={"button " + (!list.next ? " is-disabled" : " is-focused" + (isLoading? " is-loading" : ""))}
           onClick={onClickNext}
           >
           Xem thêm
@@ -190,7 +210,7 @@ const BookList = ({ list }) => {
 }
 
 
-const Search = ({ onSubmit, value, onChange, children }) => {
+const Search = ({ onSubmit, value, onChange, children, isLoading }) => {
   return (
     <div className="container has-text-centered">
         <h1 className="title">
@@ -214,7 +234,7 @@ const Search = ({ onSubmit, value, onChange, children }) => {
             </div>
             <div className="columns is-mobile">
                 <div className="column is-2-desktop is-offset-5-desktop has-text-centered">
-                    <button type="submit" className="button is-primary is-medium">{children}</button>
+                    <button type="submit" className={ "button is-primary is-medium" + (isLoading? " is-loading" : "")}>{children}</button>
                 </div>
             </div>
         </form>
