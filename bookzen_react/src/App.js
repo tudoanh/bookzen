@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import Truncate from 'react-truncate';
 import './App.css';
 
-
 const DEFAULT_QUERY = '';
 const DEFAULT_PAGE = 1
 const DEFAULT_HPP = '12'
@@ -28,6 +27,7 @@ class App extends Component {
       searchKey: '',
       isLoading: false,
       entries: [],
+      message: "",
     }
 
     this.needToSearchBooks = this.needToSearchBooks.bind(this)
@@ -45,9 +45,14 @@ class App extends Component {
   }
 
   setSearchBooks(result) {
-    const { books, page } = result
+    const { books = [], page } = result
     const { searchKey, results } = this.state
 
+    const message = result && result.message
+      ? result.message
+      : ""
+
+    console.log(result, result.message, message)
     const oldBooks = results && results[searchKey]
       ? results[searchKey].books
       : []
@@ -58,8 +63,9 @@ class App extends Component {
     ]
 
     this.setState({
-      results: { ...results, [searchKey]: { books: updatedBooks, page }},
       data: result,
+      message: message,
+      results: { ...results, [searchKey]: { books: updatedBooks, page }},
       isLoading: false,
     })
   }
@@ -111,9 +117,11 @@ class App extends Component {
   }
 
   render() {
-    const { searchTerm, results, searchKey, data, isLoading, entries } = this.state
+    const { searchTerm, results, searchKey, data, isLoading, entries, message } = this.state
     const page = (results && results[searchKey] && results[searchKey].page) || 0
     const list = (results && results[searchKey] && results[searchKey].books) || []
+    const response_message = (searchTerm && message)
+    console.log(message, response_message)
 
     return (
       <div key={ results.id } className="App">
@@ -138,7 +146,14 @@ class App extends Component {
         <div className="columns">
             <div className="column is-12"></div>
         </div>
-        <BookList list={ list } />
+        { !!list.length
+          ?<BookList list={ list } />
+          :null
+        }
+        { response_message
+          ? <BookNotFound />
+          : null
+        }
           <div className="columns">
               <div className="column is-12"></div>
           </div>
@@ -175,6 +190,27 @@ const Index = ({ onSubmit, value, onChange, children }) => {
       </div>
     </section>
   )
+}
+
+const BookNotFound = () => {
+  return (
+      <div className="container">
+          <div className="columns">
+              <div className="column is-10-mobile is-offset-1-mobile is-8-desktop is-offset-2-desktop">
+                  <div className="content is-medium">
+                      <h2 className="has-text-centered">Xin lỗi, nhưng Bookzen không tìm được cuốn sách đó</h2>
+                      <p>Xin vui lòng thử lại: </p>
+                      <ul>
+                          <li>Tìm bằng từ khóa không có dấu, ví dụ như <strong><em>Thanh pho hon rong</em></strong> thay vì <strong>Thành phố hồn rỗng</strong></li>
+                          <li>Tìm với từ khóa ngắn hơn, ví dụ như <strong>Harry Potter</strong> thay vì <strong>"Harry Potter và bảo bối tử thần"</strong></li>
+                          <li>Hoặc vui lòng phản hồi tại địa chỉ mail <em>tu0703@gmail.com</em> để mình có thể sửa lỗi.</li>
+                      </ul>
+                      <p>Xin cảm ơn.</p>
+                  </div>
+              </div>
+          </div>
+      </div>
+    )
 }
 
 const InstagramFeed = ({ searchTerm, list }) => {
