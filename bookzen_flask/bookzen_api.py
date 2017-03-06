@@ -60,6 +60,10 @@ class GetInstagramTagFeed(Resource):
         data = json.loads(js)
         feed = data['entry_data']['TagPage'][0]['tag']['media']['nodes']
 
+        for media in feed:
+            media_info = json.loads(insta.mediaInfo(media['id']).LastJson)
+            media['media_info'] = media_info
+
         return {'entries': feed}
 
 
