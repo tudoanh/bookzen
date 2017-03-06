@@ -62,7 +62,7 @@ class GetInstagramTagFeed(Resource):
 
         for media in feed:
             insta.mediaInfo(media['id'])
-            media_info = json.loads(insta.LastJson)
+            media_info = insta.LastJson
 
             media['media_info'] = media_info
 
