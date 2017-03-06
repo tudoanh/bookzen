@@ -6,11 +6,18 @@ from flask_restful import abort, reqparse, Resource, Api, fields, marshal
 import requests
 
 from bookzen import app, Books, str_handler
+# https://github.com/LevPasha/Instagram-API-python
+from instagram.InstagramAPI import InstagramAPI
 
 
 app.config['ERROR_404_HELP'] = False
 api = Api(app)
 CORS(app)
+
+user_name = app.config['INSTAGRAM_USER']
+user_password = app.config['INSTAGRAM_PASSWORD']
+insta = InstagramAPI(user_name, user_password)
+insta.login()
 
 _version = 'v1.0'
 
@@ -39,7 +46,7 @@ def merge_two_dicts(x, y):
     return z
 
 
-class GetInstagramFeed(Resource):
+class GetInstagramTagFeed(Resource):
     def get(self):
         parser = reqparse.RequestParser(bundle_errors=True)
         parser.add_argument('keyword', type=str, help="Book name or author, can not emty",
@@ -54,6 +61,34 @@ class GetInstagramFeed(Resource):
         feed = data['entry_data']['TagPage'][0]['tag']['media']['nodes']
 
         return {'entries': feed}
+
+
+class GetInstagramUsername(Resource):
+    def get(self):
+        parser = reqparse.RequestParser(bundle_errors=True)
+        parser.add_argument('user_id', type=int, help="Instagram User ID", required=True)
+        args = parser.parse_args()
+
+        user_id = args.get('user_id')
+
+        if insta.getUsernameInfo(user_id):
+            return {'user': insta.LastJson}
+        else:
+            abort(404, message="Can not find any user with ID: {}".format(args.get("user_id")),)
+
+
+class GetInstagramMediaInfo(Resource):
+    def get(self):
+        parser = reqparse.RequestParser(bundle_errors=True)
+        parser.add_argument('media_id', type=int, help="Instagram Media ID", required=True)
+        args = parser.parse_args()
+
+        media_id = args.get('media_id')
+
+        if insta.mediaInfo(media_id):
+            return {'media': insta.LastJson}
+        else:
+            abort(404, message="Can not find any media with ID: {}".format(args.get("media_id")),)
 
 
 class BooksListAPI(Resource):
@@ -109,8 +144,9 @@ class BooksListAPI(Resource):
 
 
 api.add_resource(BooksListAPI, '/bookzen/api/{0}/books'.format(_version), endpoint='books')
-api.add_resource(GetInstagramFeed, '/bookzen/api/{0}/insta_feed'.format(_version))
-
+api.add_resource(GetInstagramTagFeed, '/bookzen/api/{0}/insta_feed'.format(_version))
+api.add_resource(GetInstagramUsername, '/bookzen/api/{0}/insta_user'.format(_version))
+api.add_resource(GetInstagramMediaInfo, '/bookzen/api/{0}/insta_media'.format(_version))
 
 if __name__ == '__main__':
     app.run(debug=True)

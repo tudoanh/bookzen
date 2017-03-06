@@ -6,18 +6,27 @@
 #
 aniso8601==1.2.0          # via flask-restful
 click==6.6                # via flask
+decorator==4.0.11         # via moviepy
 flask-cors==3.0.2
 flask-mongoengine==0.8
 flask-restful==0.3.5
 flask-wtf==0.13.1         # via flask-mongoengine
 flask==0.11.1             # via flask-cors, flask-mongoengine, flask-restful, flask-wtf
+imageio==2.1.2            # via moviepy
 itsdangerous==0.24        # via flask
 jinja2==2.8               # via flask
 markupsafe==0.23          # via jinja2
 mongoengine==0.10.6       # via flask-mongoengine
+moviepy==0.2.2.11
+numpy==1.12.0             # via imageio, moviepy
+olefile==0.44             # via pillow
+pillow==4.0.0             # via imageio
 pymongo==3.3.1            # via mongoengine
 python-dateutil==2.6.0    # via aniso8601
 pytz==2016.10             # via flask-restful
+requests-toolbelt==0.7.1
+requests==2.13.0
 six==1.10.0               # via flask-cors, flask-restful, python-dateutil
+tqdm==4.11.2              # via moviepy
 werkzeug==0.11.11         # via flask, flask-wtf
 wtforms==2.1              # via flask-wtf
