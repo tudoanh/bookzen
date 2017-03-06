@@ -1,9 +1,4 @@
 import React, { Component } from 'react';
-import {
-  BrowserRouter as Router,
-  Route,
-  Link
-} from 'react-router'
 import Truncate from 'react-truncate';
 import './App.css';
 
@@ -12,8 +7,10 @@ const DEFAULT_QUERY = '';
 const DEFAULT_PAGE = 1
 const DEFAULT_HPP = '12'
 
+const INSTA_POST_PATH = "https://www.instagram.com/p/"
 const PATH_BASE = 'https://bookzen.top/bookzen/api/v1.0';
 const PATH_SEARCH = '/books';
+const INSTA_PATH_SEARCH = '/insta_feed'
 const PARAM_SEARCH = 'keyword=';
 const PARAM_PAGE = 'page='
 const PARAM_HPP = 'per_page='
@@ -30,11 +27,14 @@ class App extends Component {
       searchTerm: DEFAULT_QUERY,
       searchKey: '',
       isLoading: false,
+      entries: [],
     }
 
     this.needToSearchBooks = this.needToSearchBooks.bind(this)
     this.setSearchBooks = this.setSearchBooks.bind(this);
     this.fetchSearchBooks = this.fetchSearchBooks.bind(this);
+    this.fetchInstagramFeed = this.fetchInstagramFeed.bind(this)
+    this.setInstagramFeed = this.setInstagramFeed.bind(this)
     this.onSearchChange = this.onSearchChange.bind(this);
     this.onSearchSubmit = this.onSearchSubmit.bind(this);
     // this.onSort = this.onSort.bind(this)
@@ -64,17 +64,29 @@ class App extends Component {
     })
   }
 
+  setInstagramFeed(feed){
+    const { entries } = feed
+    this.setState({ entries })
+  }
+
   fetchSearchBooks(searchTerm, page){
       fetch(`${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${unidecode(searchTerm)}&${PARAM_PAGE}${page}&${PARAM_HPP}${DEFAULT_HPP}`)
       .then(response => response.json())
       .then(result => this.setSearchBooks(result))
+      .then(this.fetchInstagramFeed(searchTerm))
   }
 
-  componentDidMount() {
-      const { searchTerm } = this.state
-      this.setState({ searchKey: searchTerm})
-      this.fetchSearchBooks(searchTerm, DEFAULT_PAGE)
+  fetchInstagramFeed(searchTerm){
+    fetch(`${PATH_BASE}${INSTA_PATH_SEARCH}?${PARAM_SEARCH}${unidecode(searchTerm)}`)
+    .then(response => response.json())
+    .then(feed => this.setInstagramFeed(feed))
   }
+
+  // componentDidMount() {
+  //     const { searchTerm } = this.state
+  //     this.setState({ searchKey: searchTerm})
+  //     this.fetchSearchBooks(searchTerm, DEFAULT_PAGE)
+  // }
 
   onSearchChange(event) {
       this.setState({searchTerm: event.target.value})
@@ -83,9 +95,11 @@ class App extends Component {
   onSearchSubmit(event) {
     const { searchTerm } = this.state
     this.setState({ searchKey: searchTerm })
+    this.fetchInstagramFeed(searchTerm)
     if (this.needToSearchBooks(searchTerm)) {
       this.fetchSearchBooks(searchTerm, DEFAULT_PAGE)
     }
+
     event.preventDefault()
     // If keyword already is cache, do not show loading button
     if (this.state.results[searchTerm]) {
@@ -97,7 +111,7 @@ class App extends Component {
   }
 
   render() {
-    const { searchTerm, results, searchKey, data, isLoading } = this.state
+    const { searchTerm, results, searchKey, data, isLoading, entries } = this.state
     const page = (results && results[searchKey] && results[searchKey].page) || 0
     const list = (results && results[searchKey] && results[searchKey].books) || []
 
@@ -138,6 +152,10 @@ class App extends Component {
           <div className="columns">
               <div className="column is-12"></div>
           </div>
+        { !!entries.length
+          ?<InstagramFeed searchTerm={searchTerm} list={entries} />
+          : null
+        }
       </div>
     );
   }
@@ -156,6 +174,39 @@ const Index = ({ onSubmit, value, onChange, children }) => {
         </Search>
       </div>
     </section>
+  )
+}
+
+const InstagramFeed = ({ searchTerm, list }) => {
+  return (
+    <div className="container has-text-centered">
+      <div className="content">
+        <h1>Mọi người nói gì về  <em>{"#" + searchTerm.split(" ").join("")}</em> trên mạng xã hội?</h1>
+      </div>
+        <div className="columns is-multiline">
+        { list.map( item =>
+            <div key={item.id} className="column is-4 is-8-mobile is-offset-2-mobile">
+                <div className="card">
+                  <div className="card-image">
+                      <a href={INSTA_POST_PATH + item.code} rel="nofollow" target="_blank">
+                        <figure className="image is-square">
+                            <img src={ item.thumbnail_src } alt="" />
+                        </figure>
+                    </a>
+                  </div>
+                  <div className="card-content">
+                    <div className="media">
+                      <div className="media-content">
+                        <p data-balloon-length="fit" data-balloon={item.caption} data-balloon-pos="up" className="title is-5"><Truncate lines={4}>{item.caption}</Truncate></p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+          )
+        }
+        </div>
+    </div>
   )
 }
 
