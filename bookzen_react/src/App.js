@@ -52,7 +52,6 @@ class App extends Component {
       ? result.message
       : ""
 
-    console.log(result, result.message, message)
     const oldBooks = results && results[searchKey]
       ? results[searchKey].books
       : []
@@ -121,7 +120,6 @@ class App extends Component {
     const page = (results && results[searchKey] && results[searchKey].page) || 0
     const list = (results && results[searchKey] && results[searchKey].books) || []
     const response_message = (searchTerm && message)
-    console.log(message, response_message)
 
     return (
       <div key={ results.id } className="App">
