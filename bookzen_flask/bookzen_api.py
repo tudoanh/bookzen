@@ -23,6 +23,8 @@ _version = 'v1.0'
 
 INSTA_URL = "https://www.instagram.com/explore/tags/"
 
+INSTA_MEDIA_INFO_API = "https://api.instagram.com/oembed/?url=https://www.instagram.com/p/"
+
 resource_fields = {
         'id': fields.String(attribute='_id'),
         'name': fields.String,
@@ -61,15 +63,19 @@ class GetInstagramTagFeed(Resource):
         feed = data['entry_data']['TagPage'][0]['tag']['media']['nodes']
 
         for media in feed:
-            insta.mediaInfo(media['id'])
-            media_info = insta.LastJson
+            if insta.mediaInfo(media['id']):
+                media_info = insta.LastJson
 
-            media['media_info'] = media_info
+                media['media_info'] = media_info
+            else:
+                insta.getUsernameInfo(media['owner']['id'])
+                user = insta.LastJson
+                media['media_info'] = user
 
         return {'entries': feed}
 
 
-class GetInstagramUsername(Resource):
+class GetInstagramUserInfo(Resource):
     def get(self):
         parser = reqparse.RequestParser(bundle_errors=True)
         parser.add_argument('user_id', type=int, help="Instagram User ID", required=True)
@@ -151,7 +157,7 @@ class BooksListAPI(Resource):
 
 api.add_resource(BooksListAPI, '/bookzen/api/{0}/books'.format(_version), endpoint='books')
 api.add_resource(GetInstagramTagFeed, '/bookzen/api/{0}/insta_feed'.format(_version))
-api.add_resource(GetInstagramUsername, '/bookzen/api/{0}/insta_user'.format(_version))
+api.add_resource(GetInstagramUserInfo, '/bookzen/api/{0}/insta_user'.format(_version))
 api.add_resource(GetInstagramMediaInfo, '/bookzen/api/{0}/insta_media'.format(_version))
 
 if __name__ == '__main__':
