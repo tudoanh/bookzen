@@ -4,6 +4,6 @@ body {
   font-family: sans-serif;
 }
 
-p.subtitle {
+div#book-info p.subtitle {
   text-transform:capitalize;
 }

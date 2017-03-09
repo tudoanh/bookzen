@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Truncate from 'react-truncate';
+import moment from 'moment';
 import './App.css';
 
 const DEFAULT_QUERY = '';
@@ -7,6 +8,7 @@ const DEFAULT_PAGE = 1
 const DEFAULT_HPP = '12'
 
 const INSTA_POST_PATH = "https://www.instagram.com/p/"
+const INSTA_USER_PATH = "https://www.instagram.com/"
 const PATH_BASE = 'https://bookzen.top/bookzen/api/v1.0';
 const PATH_SEARCH = '/books';
 const INSTA_PATH_SEARCH = '/insta_feed'
@@ -75,7 +77,7 @@ class App extends Component {
   }
 
   fetchSearchBooks(searchTerm, page){
-      fetch(`${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${unidecode(searchTerm)}&${PARAM_PAGE}${page}&${PARAM_HPP}${DEFAULT_HPP}`)
+      fetch(`${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${unidecode(searchTerm)}&${PARAM_PAGE}${page}&${PARAM_HPP}${DEFAULT_HPP}`, {timeout: 500})
       .then(response => response.json())
       .then(result => this.setSearchBooks(result))
       .then(this.fetchInstagramFeed(searchTerm))
@@ -213,9 +215,9 @@ const BookNotFound = () => {
 
 const InstagramFeed = ({ searchTerm, list }) => {
   return (
-    <div className="container has-text-centered">
-      <div className="content">
-        <h1>Mọi người nói gì về  <em>{"#" + searchTerm.split(" ").join("")}</em> trên mạng xã hội?</h1>
+    <div className="container">
+      <div className="content is-medium has-text-centered">
+        <h1 class="title">Mọi người nói gì về  <em>{"#" + searchTerm.split(" ").join("")}</em> trên mạng xã hội?</h1>
       </div>
         <div className="columns is-multiline">
         { list.map( item =>
@@ -230,9 +232,19 @@ const InstagramFeed = ({ searchTerm, list }) => {
                   </div>
                   <div className="card-content">
                     <div className="media">
-                      <div className="media-content">
-                        <p data-balloon-length="fit" data-balloon={item.caption} data-balloon-pos="up" className="title is-5"><Truncate lines={4}>{item.caption}</Truncate></p>
+                      <div className="media-left">
+                        <figure className="image" style={{height: '40px', width: '40px'}}>
+                          <img src={item.media_info.items !== undefined? item.media_info.items[0].user.profile_pic_url : item.media_info.user.profile_pic_url} alt={item.media_info.items !== undefined? item.media_info.items[0].user.full_name : item.media_info.user.full_name} />
+                        </figure>
                       </div>
+                      <div className="media-content">
+                        <p className="title is-4">{(item.media_info.items !== undefined? item.media_info.items[0].user.full_name : item.media_info.user.full_name) || (item.media_info.items !== undefined? item.media_info.items[0].user.username : item.media_info.user.username)}</p>
+                        <p className="subtitle is-6"><a target="_blank" href={INSTA_USER_PATH + (item.media_info.items !== undefined? item.media_info.items[0].user.username : item.media_info.user.username) }>@{item.media_info.items !== undefined? item.media_info.items[0].user.username : item.media_info.user.username}</a></p>
+                      </div>
+                    </div>
+                    <div className="content">
+                      <p data-balloon-length="fit" data-balloon={item.caption} data-balloon-pos="down"><Truncate lines={4}>{item.caption}</Truncate></p>
+                      <p><small>{item.likes.count}<i className="fa fa-heart fa-1" aria-hidden="true"></i> - {moment.unix(item.date).format("h:mm a - D MMMM YYYY")}</small></p>
                     </div>
                   </div>
                 </div>
@@ -277,7 +289,7 @@ const BookList = ({ list }) => {
                   </div>
                   <div className="card-content">
                     <div className="media">
-                      <div className="media-content">
+                      <div id="book-info" className="media-content">
                           <a href={ book.url } rel="nofollow" target="_blank">
                               <p data-balloon={book.name} data-balloon-pos="up" className="title is-5"><Truncate lines={3}>{ book.name }</Truncate></p>
                           </a>
