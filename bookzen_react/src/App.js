@@ -125,7 +125,7 @@ class App extends Component {
 
     return (
       <div key={ results.id } className="App">
-        <NavBar />
+          <NavBar />
         { searchTerm === '' && Object.getOwnPropertyNames(results).length === 0
           ? <Index
             value={searchTerm}
@@ -143,9 +143,7 @@ class App extends Component {
             Tìm với Bookzen
             </Search>
           }
-        <div className="columns">
-            <div className="column is-12"></div>
-        </div>
+        <section className="section">
         { !!list.length
           ?<BookList list={ list } />
           :null
@@ -154,9 +152,7 @@ class App extends Component {
           ? <BookNotFound />
           : null
         }
-          <div className="columns">
-              <div className="column is-12"></div>
-          </div>
+        </section>
         { results[searchKey]
         ? <Pagination
             list={ data }
@@ -164,13 +160,12 @@ class App extends Component {
           />
         : null
         }
-          <div className="columns">
-              <div className="column is-12"></div>
-          </div>
+        <section className="section">
         { !!entries.length
           ?<InstagramFeed searchTerm={searchTerm} list={entries} />
           : null
         }
+        </section>
       </div>
     );
   }
@@ -234,17 +229,30 @@ const InstagramFeed = ({ searchTerm, list }) => {
                     <div className="media">
                       <div className="media-left">
                         <figure className="image" style={{height: '40px', width: '40px'}}>
-                          <img src={item.media_info.items !== undefined? item.media_info.items[0].user.profile_pic_url : item.media_info.user.profile_pic_url} alt={item.media_info.items !== undefined? item.media_info.items[0].user.full_name : item.media_info.user.full_name} />
+                          <img
+                            src={item.media_info.items !== undefined? item.media_info.items[0].user.profile_pic_url : item.media_info.user.profile_pic_url}
+                            alt={item.media_info.items !== undefined? item.media_info.items[0].user.full_name : item.media_info.user.full_name} />
                         </figure>
                       </div>
                       <div className="media-content">
-                        <p className="title is-4">{(item.media_info.items !== undefined? item.media_info.items[0].user.full_name : item.media_info.user.full_name) || (item.media_info.items !== undefined? item.media_info.items[0].user.username : item.media_info.user.username)}</p>
-                        <p className="subtitle is-6"><a target="_blank" href={INSTA_USER_PATH + (item.media_info.items !== undefined? item.media_info.items[0].user.username : item.media_info.user.username) }>@{item.media_info.items !== undefined? item.media_info.items[0].user.username : item.media_info.user.username}</a></p>
+                        <p className="title is-4">
+                          {(item.media_info.items !== undefined? item.media_info.items[0].user.full_name : item.media_info.user.full_name)
+                           || (item.media_info.items !== undefined? item.media_info.items[0].user.username : item.media_info.user.username)}
+                        </p>
+                        <p className="subtitle is-6">
+                          <a
+                            target="_blank"
+                            href={INSTA_USER_PATH + (item.media_info.items !== undefined? item.media_info.items[0].user.username : item.media_info.user.username) }>
+                            @{item.media_info.items !== undefined? item.media_info.items[0].user.username : item.media_info.user.username}
+                          </a>
+                        </p>
                       </div>
                     </div>
                     <div className="content">
-                      <p data-balloon-length="fit" data-balloon={item.caption} data-balloon-pos="down"><Truncate lines={4}>{item.caption}</Truncate></p>
-                      <p><small>{item.likes.count}<i className="fa fa-heart fa-1" aria-hidden="true"></i> - {moment.unix(item.date).format("h:mm a - D MMMM YYYY")}</small></p>
+                      <p><Truncate lines={4}>{item.caption}</Truncate></p>
+                      <p>
+                        <small>{item.likes.count}<i className="fa fa-heart fa-1" aria-hidden="true"></i> - {moment.unix(item.date).format("h:mm a - D MMMM YYYY")}</small>
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -291,7 +299,10 @@ const BookList = ({ list }) => {
                     <div className="media">
                       <div id="book-info" className="media-content">
                           <a href={ book.url } rel="nofollow" target="_blank">
-                              <p data-balloon={book.name} data-balloon-pos="up" className="title is-5"><Truncate lines={3}>{ book.name }</Truncate></p>
+                              <p
+                                className="title is-5">
+                                <Truncate lines={3}>{ book.name }</Truncate>
+                              </p>
                           </a>
                           <p className="subtitle is-6">{ book.website } - { book.price }</p>
                       </div>
@@ -317,7 +328,7 @@ const Search = ({ onSubmit, value, onChange, children, isLoading }) => {
             Tìm giá tốt nhất cho cuốn sách ưa thích của bạn
         </h2>
         <form onSubmit={onSubmit} className="control">
-            <div className="columns is-mobile">
+            <div className="columns">
                 <div className="column is-10-mobile is-offset-1-mobile is-8-desktop is-offset-2-desktop">
                     <input
                       placeholder="Tên sách, tên tác giả, từ khóa v.v..."
@@ -329,9 +340,14 @@ const Search = ({ onSubmit, value, onChange, children, isLoading }) => {
                     />
                 </div>
             </div>
-            <div className="columns is-mobile">
+            <div className="columns">
                 <div className="column is-2-desktop is-offset-5-desktop has-text-centered">
-                    <button type="submit" className={ "button is-primary is-medium" + (isLoading? " is-loading" : "")}>{children}</button>
+                    <button
+                      type="submit"
+                      className={ "button is-primary is-medium" + (isLoading? " is-loading" : "")}
+                      >
+                      {children}
+                    </button>
                 </div>
             </div>
         </form>
