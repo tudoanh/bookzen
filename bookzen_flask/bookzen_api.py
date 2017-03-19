@@ -1,4 +1,6 @@
 import json
+import random
+import time
 
 from flask import url_for
 from flask_cors import CORS
@@ -6,24 +8,13 @@ from flask_restful import abort, reqparse, Resource, Api, fields, marshal
 import requests
 
 from bookzen import app, Books, str_handler
-# https://github.com/LevPasha/Instagram-API-python
-from instagram.InstagramAPI import InstagramAPI
 
 
 app.config['ERROR_404_HELP'] = False
 api = Api(app)
 CORS(app)
 
-user_name = app.config['INSTAGRAM_USER']
-user_password = app.config['INSTAGRAM_PASSWORD']
-insta = InstagramAPI(user_name, user_password)
-insta.login()
-
 _version = 'v1.0'
-
-INSTA_URL = "https://www.instagram.com/explore/tags/"
-
-INSTA_MEDIA_INFO_API = "https://api.instagram.com/oembed/?url=https://www.instagram.com/p/"
 
 resource_fields = {
         'id': fields.String(attribute='_id'),
@@ -48,7 +39,81 @@ def merge_two_dicts(x, y):
     return z
 
 
+class InstagramBot:
+    url = 'https://www.instagram.com/'
+    url_login = 'https://www.instagram.com/accounts/login/ajax/'
+    url_tag = 'https://www.instagram.com/explore/tags/{}/?__a=1'
+    url_media_detail = 'https://www.instagram.com/p/{}/?__a=1'
+    url_user_detail = 'https://www.instagram.com/{}/?__a=1'
+    user_agent = ("Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 "
+                  "(KHTML, like Gecko) Chrome/48.0.2564.103 Safari/537.36")
+    accept_language = 'ru-RU,ru;q=0.8,en-US;q=0.6,en;q=0.4'
+    login_status = False
+    user_login = app.config['INSTAGRAM_USER']
+    user_password = app.config['INSTAGRAM_PASSWORD']
+    s = requests.Session()
+
+    def login(self):
+        print('Trying to login ...')
+        self.s.cookies.update({'sessionid': '', 'mid': '', 'ig_pr': '1',
+                               'ig_vw': '1920', 'csrftoken': '',
+                               's_network': '', 'ds_user_id': ''})
+        self.login_post = {'username': self.user_login,
+                           'password': self.user_password}
+        self.s.headers.update({'Accept-Encoding': 'gzip, deflate',
+                               'Accept-Language': self.accept_language,
+                               'Connection': 'keep-alive',
+                               'Content-Length': '0',
+                               'Host': 'www.instagram.com',
+                               'Origin': 'https://www.instagram.com',
+                               'Referer': 'https://www.instagram.com/',
+                               'User-Agent': self.user_agent,
+                               'X-Instagram-AJAX': '1',
+                               'X-Requested-With': 'XMLHttpRequest'})
+        r = self.s.get(self.url)
+        self.s.headers.update({'X-CSRFToken': r.cookies['csrftoken']})
+        time.sleep(2 * random.random())
+        login = self.s.post(self.url_login, data=self.login_post,
+                            allow_redirects=True)
+        self.s.headers.update({'X-CSRFToken': login.cookies['csrftoken']})
+        self.csrftoken = login.cookies['csrftoken']
+        time.sleep(2 * random.random())
+
+        if login.status_code == 200:
+            r = self.s.get('https://www.instagram.com/')
+            finder = r.text.find(self.user_login)
+            if finder != -1:
+                self.login_status = True
+                log_string = 'Login success!'
+                print(log_string)
+            else:
+                self.login_status = False
+                print('Login error! Check your login data!')
+        else:
+            print('Login error! Connection error!')
+
+    def get_media_by_tag(self, tag):
+        """ Get media ID set, by your hashtag """
+        if self.login_status:
+            url_tag = self.url_tag.format(tag)
+            r = self.s.get(url_tag)
+            return r.json()
+        else:
+            return {'error': 'Can not login'}
+
+    def get_media_info(self, media_id):
+        if self.login_status:
+            media_url = self.url_media_detail.format(media_id)
+            r = self.s.get(media_url)
+            return r.json()
+        else:
+            return {'error': 'Can not login'}
+
+
 class GetInstagramTagFeed(Resource):
+    insta = InstagramBot()
+    insta.login()
+
     def get(self):
         parser = reqparse.RequestParser(bundle_errors=True)
         parser.add_argument('keyword', type=str, help="Book name or author, can not emty",
@@ -57,50 +122,13 @@ class GetInstagramTagFeed(Resource):
 
         keyword = keyword_to_hashtag(args.get('keyword'))
 
-        response = requests.get(INSTA_URL + keyword)
-        js = response.text.split(' = ')[-2].split(';</script>')[0]
-        data = json.loads(js)
-        feed = data['entry_data']['TagPage'][0]['tag']['media']['nodes']
+        data = self.insta.get_media_by_tag(keyword)
+        feed = data['tag']['media']['nodes']
 
         for media in feed:
-            if insta.mediaInfo(media['id']):
-                media_info = insta.LastJson
-
-                media['media_info'] = media_info
-            else:
-                insta.getUsernameInfo(media['owner']['id'])
-                user = insta.LastJson
-                media['media_info'] = user
+            media['media_info'] = self.insta.get_media_info(media['code'])
 
         return {'entries': feed}
-
-
-class GetInstagramUserInfo(Resource):
-    def get(self):
-        parser = reqparse.RequestParser(bundle_errors=True)
-        parser.add_argument('user_id', type=int, help="Instagram User ID", required=True)
-        args = parser.parse_args()
-
-        user_id = args.get('user_id')
-
-        if insta.getUsernameInfo(user_id):
-            return {'user': insta.LastJson}
-        else:
-            abort(404, message="Can not find any user with ID: {}".format(args.get("user_id")),)
-
-
-class GetInstagramMediaInfo(Resource):
-    def get(self):
-        parser = reqparse.RequestParser(bundle_errors=True)
-        parser.add_argument('media_id', type=int, help="Instagram Media ID", required=True)
-        args = parser.parse_args()
-
-        media_id = args.get('media_id')
-
-        if insta.mediaInfo(media_id):
-            return {'media': insta.LastJson}
-        else:
-            abort(404, message="Can not find any media with ID: {}".format(args.get("media_id")),)
 
 
 class BooksListAPI(Resource):
@@ -157,8 +185,6 @@ class BooksListAPI(Resource):
 
 api.add_resource(BooksListAPI, '/bookzen/api/{0}/books'.format(_version), endpoint='books')
 api.add_resource(GetInstagramTagFeed, '/bookzen/api/{0}/insta_feed'.format(_version))
-api.add_resource(GetInstagramUserInfo, '/bookzen/api/{0}/insta_user'.format(_version))
-api.add_resource(GetInstagramMediaInfo, '/bookzen/api/{0}/insta_media'.format(_version))
 
 if __name__ == '__main__':
     app.run(debug=True)
