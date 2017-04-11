@@ -77,7 +77,7 @@ class App extends Component {
   }
 
   fetchSearchBooks (searchTerm, page) {
-      fetch(`${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${unidecode(searchTerm)}&${PARAM_PAGE}${page}&${PARAM_HPP}${DEFAULT_HPP}`, {timeout: 500})
+    fetch(`${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${unidecode(searchTerm)}&${PARAM_PAGE}${page}&${PARAM_HPP}${DEFAULT_HPP}`, {timeout: 500})
       .then(response => response.json())
       .then(result => this.setSearchBooks(result))
       .then(this.fetchInstagramFeed(searchTerm))
@@ -143,30 +143,30 @@ class App extends Component {
             </Search>
           }
         <div className='section'>
-        { !!list.length
+          { list.length
           ? <BookList list={list} />
-          :null
+          : null
         }
-        { response_message
+          { response_message
           ? <BookNotFound />
           : null
         }
-      </div>
+        </div>
         { results[searchKey]
         ? <Pagination
-            list={ data }
-            onClickNext={() => this.fetchSearchBooks(searchTerm, page + 1)}
+          list={data}
+          onClickNext={() => this.fetchSearchBooks(searchTerm, page + 1)}
           />
         : null
         }
         <div className='section'>
-        { !!entries.length
-          ?<InstagramFeed searchTerm={searchTerm} list={entries} />
+          { entries.length
+          ? <InstagramFeed searchTerm={searchTerm} list={entries} />
           : null
         }
+        </div>
       </div>
-      </div>
-    );
+    )
   }
 }
 
@@ -188,76 +188,78 @@ const Index = ({ onSubmit, value, onChange, children }) => {
 
 const BookNotFound = () => {
   return (
-      <div className='container'>
-          <div className='columns'>
-              <div className='column is-10-mobile is-offset-1-mobile is-8-desktop is-offset-2-desktop'>
-                  <div className='content is-medium'>
-                      <h2 className='has-text-centered'>Xin lỗi, nhưng Bookzen không tìm được cuốn sách đó</h2>
-                      <p>Xin vui lòng thử lại: </p>
-                      <ul>
-                          <li>Tìm bằng từ khóa không có dấu, ví dụ như <strong><em>Thanh pho hon rong</em></strong> thay vì <strong>Thành phố hồn rỗng</strong></li>
-                          <li>Tìm với từ khóa ngắn hơn, ví dụ như <strong>Harry Potter</strong> thay vì <strong>'Harry Potter và bảo bối tử thần'</strong></li>
-                          <li>Hoặc vui lòng phản hồi tại địa chỉ mail <em>tu0703@gmail.com</em> để mình có thể sửa lỗi.</li>
-                      </ul>
-                      <p>Xin cảm ơn.</p>
-                  </div>
-              </div>
+    <div className='container'>
+      <div className='columns'>
+        <div className='column is-10-mobile is-offset-1-mobile is-8-desktop is-offset-2-desktop'>
+          <div className='content is-medium'>
+            <h2 className='has-text-centered'>Xin lỗi, nhưng Bookzen không tìm được cuốn sách đó</h2>
+            <p>Xin vui lòng thử lại: </p>
+            <ul>
+              <li>Tìm bằng từ khóa không có dấu, ví dụ như <strong><em>Thanh pho hon rong</em></strong> thay vì <strong>Thành phố hồn rỗng</strong></li>
+              <li>Tìm với từ khóa ngắn hơn, ví dụ như <strong>Harry Potter</strong> thay vì <strong>'Harry Potter và bảo bối tử thần'</strong></li>
+              <li>Hoặc vui lòng phản hồi tại địa chỉ mail <em>tu0703@gmail.com</em> để mình có thể sửa lỗi.</li>
+            </ul>
+            <p>Xin cảm ơn.</p>
           </div>
+        </div>
       </div>
-    )
+    </div>
+  )
 }
 
 const InstagramFeed = ({ searchTerm, list }) => {
   return (
     <div className='container'>
       <div className='content is-medium has-text-centered'>
-        <h1 className='title'>Mọi người nói gì về  <a href={`https://instagram.com/explore/tags/${searchTerm.split(' ').join('')}`}><em>{'#' + searchTerm.split(' ').join('')}</em></a> trên mạng xã hội?</h1>
+        <h1 className='title'>Mọi người nói gì về                                <a href={`https://instagram.com/explore/tags/${searchTerm.split(' ').join('')}`}><em>{'#' + searchTerm.split(' ').join('')}</em></a> trên mạng xã hội?</h1>
       </div>
-        <div className='columns is-multiline'>
-        { list.map( item =>
-            <div key={item.id} className='column is-4 is-10-mobile is-offset-1-mobile'>
-                <div className='card'>
-                  <div className='card-image'>
-                      <a href={INSTA_POST_PATH + item.code} rel='nofollow' target='_blank'>
-                        <figure className='image is-square'>
-                            <img src={ item.thumbnail_src } alt='' />
-                        </figure>
-                    </a>
+      <div className='columns is-multiline'>
+        { list.map(item =>
+          <div key={item.id} className='column is-4 is-10-mobile is-offset-1-mobile'>
+            <div className='card'>
+              <div className='card-image'>
+                <a href={INSTA_POST_PATH + item.code} rel='nofollow' target='_blank'>
+                  <figure className='image is-square'>
+                    <img src={item.thumbnail_src} alt='' />
+                  </figure>
+                </a>
+              </div>
+              <div className='card-content'>
+                <div className='media'>
+                  <div className='media-left'>
+                    <figure className='image' style={{height: '40px', width: '40px'}}>
+                      <img
+                        src={item.media_info.media.owner.profile_pic_url}
+                        alt={item.media_info.media.owner.full_name} />
+                    </figure>
                   </div>
-                  <div className='card-content'>
-                    <div className='media'>
-                      <div className='media-left'>
-                        <figure className='image' style={{height: '40px', width: '40px'}}>
-                          <img
-                            src={ item.media_info.media.owner.profile_pic_url }
-                            alt={ item.media_info.media.owner.full_name } />
-                        </figure>
-                      </div>
-                      <div className='media-content'>
-                        <p className='title is-4'>
-                          { item.media_info.media.owner.full_name || item.media_info.media.owner.username}
-                        </p>
-                        <p className='subtitle is-6'>
-                          <a
-                            target='_blank'
-                            href={INSTA_USER_PATH + item.media_info.media.owner.username}>
+                  <div className='media-content'>
+                    <p className='title is-4'>
+                      { item.media_info.media.owner.full_name || item.media_info.media.owner.username}
+                    </p>
+                    <p className='subtitle is-6'>
+                      <a
+                        target='_blank'
+                        href={INSTA_USER_PATH + item.media_info.media.owner.username}>
                             @{item.media_info.media.owner.username}
-                          </a>
-                        </p>
-                      </div>
-                    </div>
-                    <div className='content'>
-                      <p><Truncate lines={4}>{item.caption}</Truncate></p>
-                      <p>
-                        <small>{item.likes.count}<i className='fa fa-heart fa-1' aria-hidden='true'></i> - {moment.unix(item.date).format('h:mm a - D MMMM YYYY')}</small>
-                      </p>
-                    </div>
+                      </a>
+                    </p>
                   </div>
                 </div>
+                <div className='content'>
+                  <p><Truncate lines={4}>{item.caption}</Truncate></p>
+                </div>
+                <footer className='card-footer'>
+                  <p className='card-footer-item'>
+                    <small>{item.likes.count}<i className='fa fa-heart fa-1' aria-hidden='true' /> - {moment.unix(item.date).format('h:mm a - D MMMM YYYY')}</small>
+                  </p>
+                </footer>
+              </div>
             </div>
+          </div>
           )
         }
-        </div>
+      </div>
     </div>
   )
 }
@@ -266,144 +268,142 @@ const Pagination = ({ list, onClickNext, isLoading }) => {
   return (
     <div className='container has-text-centered'>
       <div className='columns'>
-      <div className='column is-2-desktop is-offset-5-desktop is-8-mobile is-offset-2-mobile'>
-        <a
-          className={'button ' + (!list.next ? ' is-disabled' : ' is-focused' + (isLoading? ' is-loading' : ''))}
-          onClick={onClickNext}
+        <div className='column is-2-desktop is-offset-5-desktop is-8-mobile is-offset-2-mobile'>
+          <a
+            className={'button ' + (!list.next ? ' is-disabled' : ' is-focused' + (isLoading ? ' is-loading' : ''))}
+            onClick={onClickNext}
           >
           Xem thêm
         </a>
+        </div>
       </div>
     </div>
-  </div>
   )
 }
 
 const BookList = ({ list }) => {
   return (
     <div className='container has-text-centered'>
-        <div className='columns is-multiline'>
-        { list.map( book =>
-            <div key={book.id} className='column is-2 is-8-mobile is-offset-2-mobile'>
-                <div className='card'>
-                  <div className='card-image'>
-                      <a href={book.url} rel='nofollow' target='_blank'>
-                        <figure className='image is-square'>
-                            <img src={ book.image_uri } alt='' />
-                        </figure>
+      <div className='columns is-multiline'>
+        { list.map(book =>
+          <div key={book.id} className='column is-2 is-8-mobile is-offset-2-mobile'>
+            <div className='card'>
+              <div className='card-image'>
+                <a href={book.url} rel='nofollow' target='_blank'>
+                  <figure className='image is-square'>
+                    <img src={book.image_uri} alt='' />
+                  </figure>
+                </a>
+              </div>
+              <div className='card-content'>
+                <div className='media'>
+                  <div id='book-info' className='media-content'>
+                    <a href={book.url} rel='nofollow' target='_blank'>
+                      <p
+                        className='title is-5'>
+                        <Truncate lines={3}>{ book.name }</Truncate>
+                      </p>
                     </a>
-                  </div>
-                  <div className='card-content'>
-                    <div className='media'>
-                      <div id='book-info' className='media-content'>
-                          <a href={ book.url } rel='nofollow' target='_blank'>
-                              <p
-                                className='title is-5'>
-                                <Truncate lines={3}>{ book.name }</Truncate>
-                              </p>
-                          </a>
-                          <p className='subtitle is-6'>{ book.website } - { book.price }</p>
-                      </div>
-                    </div>
+                    <p className='subtitle is-6'>{ book.website } - { book.price }</p>
                   </div>
                 </div>
+              </div>
             </div>
+          </div>
           )
         }
-        </div>
+      </div>
     </div>
   )
 }
-
 
 const Search = ({ onSubmit, value, onChange, children, isLoading }) => {
   return (
     <div className='container has-text-centered'>
-        <h1 className='title'>
+      <h1 className='title'>
             Bookzen
         </h1>
-        <h2 className='subtitle'>
+      <h2 className='subtitle'>
             Tìm giá tốt nhất cho cuốn sách ưa thích của bạn
         </h2>
-        <form onSubmit={onSubmit} className='control'>
-            <div className='columns'>
-                <div className='column is-10-mobile is-offset-1-mobile is-8-desktop is-offset-2-desktop'>
-                    <input
-                      placeholder='Tên sách, tên tác giả, từ khóa v.v...'
-                      className='input is-primary is-medium'
-                      type='text'
-                      value={value}
-                      onChange={onChange}
-                      autoFocus={true}
+      <form onSubmit={onSubmit} className='control'>
+        <div className='columns'>
+          <div className='column is-10-mobile is-offset-1-mobile is-8-desktop is-offset-2-desktop'>
+            <input
+              placeholder='Tên sách, tên tác giả, từ khóa v.v...'
+              className='input is-primary is-medium'
+              type='text'
+              value={value}
+              onChange={onChange}
+              autoFocus
                     />
-                </div>
-            </div>
-            <div className='columns'>
-                <div className='column is-2-desktop is-offset-5-desktop has-text-centered'>
-                    <button
-                      type='submit'
-                      className={ 'button is-primary is-medium' + (isLoading? ' is-loading' : '')}
+          </div>
+        </div>
+        <div className='columns'>
+          <div className='column is-2-desktop is-offset-5-desktop has-text-centered'>
+            <button
+              type='submit'
+              className={'button is-primary is-medium' + (isLoading ? ' is-loading' : '')}
                       >
-                      {children}
-                    </button>
-                </div>
-            </div>
-        </form>
+              {children}
+            </button>
+          </div>
+        </div>
+      </form>
     </div>
   )
 }
 
-
 const NavBar = () => {
-  function toggleNav() {
-      var nav = document.getElementById('nav-menu');
-      var className = nav.getAttribute('class');
-      if(className === 'nav-right nav-menu') {
-          nav.className = 'nav-right nav-menu is-active';
-      } else {
-          nav.className = 'nav-right nav-menu';
-      }
+  function toggleNav () {
+    var nav = document.getElementById('nav-menu')
+    var className = nav.getAttribute('class')
+    if (className === 'nav-right nav-menu') {
+      nav.className = 'nav-right nav-menu is-active'
+    } else {
+      nav.className = 'nav-right nav-menu'
+    }
   }
   return (
-        <nav className='nav'>
-            <div className='container'>
-                <div className='nav-left'>
-                    <a className='nav-item is-brand' href=''>
-                        <h1 className='title is-3'>BOOKZEN</h1>
-                    </a>
-                </div>
+    <nav className='nav'>
+      <div className='container'>
+        <div className='nav-left'>
+          <a className='nav-item is-brand' href=''>
+            <h1 className='title is-3'>BOOKZEN</h1>
+          </a>
+        </div>
 
-                <div className='nav-center'>
-                    <a className='nav-item' href='https://github.com/tudoanh/bookzen'>
-                        <span className='icon'>
-                            <i className='fa fa-github' />
-                        </span>
-                    </a>
-                    <a className='nav-item' href='#'>
-                        <span className='icon'>
-                            <i className='fa fa-instagram' />
-                        </span>
-                    </a>
-                </div>
+        <div className='nav-center'>
+          <a className='nav-item' href='https://github.com/tudoanh/bookzen'>
+            <span className='icon'>
+              <i className='fa fa-github' />
+            </span>
+          </a>
+          <a className='nav-item' href='#'>
+            <span className='icon'>
+              <i className='fa fa-instagram' />
+            </span>
+          </a>
+        </div>
 
-                <span id='nav-toggle' className='nav-toggle' onClick={toggleNav} >
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </span>
+        <span id='nav-toggle' className='nav-toggle' onClick={toggleNav} >
+          <span />
+          <span />
+          <span />
+        </span>
 
-                <div id='nav-menu' className='nav-right nav-menu'>
-                    <a className='nav-item' href='https://medium.com/@doanhtu' target='_blank'>
+        <div id='nav-menu' className='nav-right nav-menu'>
+          <a className='nav-item' href='https://medium.com/@doanhtu' target='_blank'>
                         /blog
                     </a>
-                    <a className='nav-item' href='https://tudoanh.typeform.com/to/BsA7mv' target='_blank'>
+          <a className='nav-item' href='https://tudoanh.typeform.com/to/BsA7mv' target='_blank'>
                         /contact
                     </a>
-                </div>
-            </div>
-          </nav>
+        </div>
+      </div>
+    </nav>
   )
 }
 
-export default App;
+export default App
 export { Search, Index }
