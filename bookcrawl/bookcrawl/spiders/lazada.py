@@ -40,7 +40,7 @@ class LazadaSpider(CrawlSpider):
 
     def parse_item(self, response):
         """
-        @url http://www.lazada.vn/hoa-tu-dan-tai-ban-co-bo-sung-2323659.html
+        @url http://www.lazada.vn/tony-buoi-sang-tren-duong-bang-1540897.html
         @returns items 1
         @scrapes name name_unidecode price description
         @scrapes url project spider server date
