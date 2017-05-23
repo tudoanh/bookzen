@@ -229,19 +229,19 @@ const InstagramFeed = ({ searchTerm, list }) => {
                   <div className='media-left'>
                     <figure className='image' style={{height: '40px', width: '40px'}}>
                       <img
-                        src={item.media_info.media.owner.profile_pic_url}
-                        alt={item.media_info.media.owner.full_name} />
+                        src={item.media_info.graphql.shortcode_media.owner.profile_pic_url}
+                        alt={item.media_info.graphql.shortcode_media.owner.full_name} />
                     </figure>
                   </div>
                   <div className='media-content'>
                     <p className='title is-4'>
-                      { item.media_info.media.owner.full_name || item.media_info.media.owner.username}
+                      { item.media_info.graphql.shortcode_media.owner.full_name || item.media_info.graphql.shortcode_media.owner.username}
                     </p>
                     <p className='subtitle is-6'>
                       <a
                         target='_blank'
-                        href={INSTA_USER_PATH + item.media_info.media.owner.username}>
-                            @{item.media_info.media.owner.username}
+                        href={INSTA_USER_PATH + item.media_info.graphql.shortcode_media.owner.username}>
+                            @{item.media_info.graphql.shortcode_media.owner.username}
                       </a>
                     </p>
                   </div>
