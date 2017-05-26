@@ -5,15 +5,15 @@
 #    pip-compile --output-file requirements.txt requirements.in
 #
 asn1crypto==0.22.0        # via cryptography
-attrs==17.1.0             # via automat, service-identity
+attrs==17.2.0             # via automat, service-identity
 automat==0.6.0            # via twisted
 cffi==1.10.0              # via cryptography
 constantly==15.1.0        # via twisted
-cryptography==1.8.1       # via pyopenssl
+cryptography==1.8.2       # via pyopenssl
 cssselect==1.0.1          # via parsel, scrapy
 fake-useragent==0.1.7     # via scrapy-fake-useragent
 idna==2.5                 # via cryptography
-incremental==16.10.1      # via twisted
+incremental==17.5.0       # via twisted
 lxml==3.7.3               # via parsel, scrapy
 packaging==16.8           # via cryptography
 parsel==1.2.0             # via scrapy
@@ -26,8 +26,9 @@ pyopenssl==17.0.0         # via scrapy, service-identity
 pyparsing==2.2.0          # via packaging
 queuelib==1.4.2           # via scrapy
 scrapy-fake-useragent==1.0.2
+scrapy-splash==0.7.2
 scrapy==1.4.0
-service-identity==16.0.0  # via scrapy
+service-identity==17.0.0  # via scrapy
 six==1.10.0               # via automat, cryptography, packaging, parsel, pyopenssl, scrapy, w3lib
 twisted==17.1.0           # via scrapy
 unidecode==0.4.20
