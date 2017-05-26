@@ -47,26 +47,19 @@ class FahasaSpider(scrapy.Spider):
     name = 'fahasa'
     allowed_domains = ['fahasa.com']
     start_urls = [
-            "https://www.fahasa.com/sach-trong-nuoc/van-hoc-trong-nuoc.html",
-            "https://www.fahasa.com/sach-trong-nuoc/van-hoc-dich.html",
-            # "https://www.fahasa.com/sach-trong-nuoc/kinh-te-chinh-tri-phap-ly.html",
-            # "https://www.fahasa.com/sach-trong-nuoc/tam-ly-ky-nang-song.html",
-            # "https://www.fahasa.com/sach-trong-nuoc/kien-thuc-tong-hop.html",
-            # "https://www.fahasa.com/sach-trong-nuoc/khoa-hoc-ky-thuat.html",
-            # "https://www.fahasa.com/sach-trong-nuoc/tu-dien.html",
-            # "https://www.fahasa.com/sach-trong-nuoc/sach-hoc-ngoai-ngu.html",
-            # "https://www.fahasa.com/foreigncategory.html",
-            ]
-
-    # rules = (
-    #     Rule(LinkExtractor(
-    #         restrict_xpaths='//*[@title="Next"]'),
-    #         process_links='process_links'),
-    #     Rule(LinkExtractor(
-    #         restrict_xpaths='//*[@class="product-name p-name-list"]/a'),
-    #         process_links='process_links',
-    #         callback='parse_item'),
-    # )
+        "https://www.fahasa.com/sach-trong-nuoc/van-hoc-trong-nuoc.html",
+        "https://www.fahasa.com/sach-trong-nuoc/van-hoc-dich.html",
+        "https://www.fahasa.com/sach-trong-nuoc/kinh-te-chinh-tri-phap-ly.html",
+        "https://www.fahasa.com/sach-trong-nuoc/tam-ly-ky-nang-song.html",
+        "https://www.fahasa.com/sach-trong-nuoc/kien-thuc-tong-hop.html",
+        "https://www.fahasa.com/sach-trong-nuoc/khoa-hoc-ky-thuat.html",
+        "https://www.fahasa.com/sach-trong-nuoc/sach-hoc-ngoai-ngu.html",
+        "https://www.fahasa.com/sach-trong-nuoc/phong-thuy-kinh-dich.html",
+        "https://www.fahasa.com/sach-trong-nuoc/nu-cong-gia-chanh.html",
+        "https://www.fahasa.com/sach-trong-nuoc/am-nhac-my-thuat-thoi-trang.html",
+        "https://www.fahasa.com/sach-trong-nuoc/van-hoa-nghe-thuat-du-lich.html"
+        "https://www.fahasa.com/sach-trong-nuoc/lich-su-dia-ly-ton-giao.html"
+        ]
 
     def start_requests(self):
         for url in self.start_urls:
