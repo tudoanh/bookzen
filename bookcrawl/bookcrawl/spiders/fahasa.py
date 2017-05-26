@@ -94,7 +94,8 @@ class FahasaSpider(scrapy.Spider):
                                 '//*[@class="product-name"]/h1/text()')[-1])
         l.add_value('name_unidecode', unidecode(l.get_xpath(
                                 '//*[@class="product-name"]/h1/text()')[-1]))
-        l.add_xpath('price', '//*[@class="price-box"]/p[1]/span[2]/text()',
+        l.add_value('price',
+                    l.get_xpath('//*[@class="price"]/text()')[1].strip(),
                     TakeFirst(), re=r'\d+\.\d+')
         l.add_value('description',
                     filter(None,
