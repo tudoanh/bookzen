@@ -45,7 +45,7 @@ end
 
 class FahasaSpider(scrapy.Spider):
     name = 'fahasa'
-    allowed_domains = ['fahasa.com']
+    allowed_domains = ['fahasa.com', 'webcache.googleusercontent.com']
     start_urls = [
         "https://www.fahasa.com/sach-trong-nuoc/van-hoc-trong-nuoc.html",
         "https://www.fahasa.com/sach-trong-nuoc/van-hoc-dich.html",
@@ -77,9 +77,8 @@ class FahasaSpider(scrapy.Spider):
         url_selector = response.xpath(
             '//*[@class="product-name p-name-list"]/a/@href')
         for url in url_selector.extract():
-            yield SplashRequest(url, callback=self.parse_item,
-                                endpoint='execute',
-                                args={'lua_source': script2})
+            url = 'http://webcache.googleusercontent.com/search?q=cache:' + url
+            yield Request(url, callback=self.parse_item)
 
     def parse_item(self, response):
         """
