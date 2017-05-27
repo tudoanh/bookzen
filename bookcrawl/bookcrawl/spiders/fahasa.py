@@ -103,7 +103,7 @@ class FahasaSpider(scrapy.Spider):
         l.add_xpath('image_uri', '//*[@id="image"]/@src')
 
         # Information fields
-        l.add_value('url', response.url)
+        l.add_value('url', response.url[response.url.find('cache:')+6:])
         l.add_value('project', self.settings.get('BOT_NAME'))
         l.add_value('spider', self.name)
         l.add_value('server', socket.gethostname())
