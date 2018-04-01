@@ -19,17 +19,17 @@ class FahasaSpider(CrawlSpider):
     allowed_domains = ['localhost', 'fahasa.com']
     start_urls = [
         "https://www.fahasa.com/sach-trong-nuoc/van-hoc-trong-nuoc.html",
-        # "https://www.fahasa.com/sach-trong-nuoc/van-hoc-dich.html",
-        # "https://www.fahasa.com/sach-trong-nuoc/kinh-te-chinh-tri-phap-ly.html",
-        # "https://www.fahasa.com/sach-trong-nuoc/tam-ly-ky-nang-song.html",
-        # "https://www.fahasa.com/sach-trong-nuoc/kien-thuc-tong-hop.html",
-        # "https://www.fahasa.com/sach-trong-nuoc/khoa-hoc-ky-thuat.html",
-        # "https://www.fahasa.com/sach-trong-nuoc/sach-hoc-ngoai-ngu.html",
-        # "https://www.fahasa.com/sach-trong-nuoc/phong-thuy-kinh-dich.html",
-        # "https://www.fahasa.com/sach-trong-nuoc/nu-cong-gia-chanh.html",
-        # "https://www.fahasa.com/sach-trong-nuoc/am-nhac-my-thuat-thoi-trang.html",
-        # "https://www.fahasa.com/sach-trong-nuoc/van-hoa-nghe-thuat-du-lich.html"
-        # "https://www.fahasa.com/sach-trong-nuoc/lich-su-dia-ly-ton-giao.html",
+        "https://www.fahasa.com/sach-trong-nuoc/van-hoc-dich.html",
+        "https://www.fahasa.com/sach-trong-nuoc/kinh-te-chinh-tri-phap-ly.html",
+        "https://www.fahasa.com/sach-trong-nuoc/tam-ly-ky-nang-song.html",
+        "https://www.fahasa.com/sach-trong-nuoc/kien-thuc-tong-hop.html",
+        "https://www.fahasa.com/sach-trong-nuoc/khoa-hoc-ky-thuat.html",
+        "https://www.fahasa.com/sach-trong-nuoc/sach-hoc-ngoai-ngu.html",
+        "https://www.fahasa.com/sach-trong-nuoc/phong-thuy-kinh-dich.html",
+        "https://www.fahasa.com/sach-trong-nuoc/nu-cong-gia-chanh.html",
+        "https://www.fahasa.com/sach-trong-nuoc/am-nhac-my-thuat-thoi-trang.html",
+        "https://www.fahasa.com/sach-trong-nuoc/van-hoa-nghe-thuat-du-lich.html"
+        "https://www.fahasa.com/sach-trong-nuoc/lich-su-dia-ly-ton-giao.html",
     ]
     spash_url = 'http://localhost:8050/render.html?url={}&timeout=10&wait=2&images=0'
 
