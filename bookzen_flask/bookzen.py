@@ -31,8 +31,7 @@ class Books(db.Document):
     project = db.StringField()
     date = db.DateTimeField()
 
-    meta = {'indexes': [
-        {'fields': ['$name', "$name_unidecode"]}]}
+    meta = {'indexes': [{'fields': ['$name', "$name_unidecode"]}]}
 
     def __repr__(self):
         return "{0} - {1} - {2}".format(self.name, self.spider, self.price)
@@ -40,7 +39,9 @@ class Books(db.Document):
 
 class SearchForm(Form):
     flash_msg = "Please search something so we can serve you"
-    search = StringField("Search book\'s title", validators=[DataRequired(flash_msg)])
+    search = StringField(
+        "Search book\'s title", validators=[DataRequired(flash_msg)]
+    )
     submit = SubmitField()
 
 
@@ -56,6 +57,7 @@ class ContactForm(Form):
 def str_handler(string):
     if isinstance(string, str):
         return json.dumps(string)
+
     elif isinstance(string, unicode):
         return '''\"{0}\"'''.format(string.encode('utf-8'))
 
@@ -66,6 +68,7 @@ def index():
     if form.validate_on_submit():
         keyword = form.search.data
         return redirect(url_for('search', keyword=keyword))
+
     else:
         return render_template('index.html', form=form)
 
@@ -76,10 +79,12 @@ def search(keyword):
     if form.validate_on_submit():
         keyword = form.search.data
         return redirect(url_for('search', keyword=keyword))
+
     query = Books.objects.search_text(str_handler(keyword))
     books = [dict(json.loads(i.to_json())) for i in query.order_by('+price')]
     if books:
         return render_template('results.html', form=form, books=books)
+
     else:
         return render_template('not_found.html', form=form)
 
@@ -92,7 +97,9 @@ def contact():
         fromaddr = form.email.data
         toaddr = app.config["MY_EMAIL_ADDRESS"]
         msg['subject'] = form.subject.data
-        msg['from'] = formataddr((str(Header(form.name.data, 'utf-8')), fromaddr))
+        msg['from'] = formataddr(
+            (str(Header(form.name.data, 'utf-8')), fromaddr)
+        )
         msg['to'] = toaddr
         msg['reply-to'] = fromaddr
         body = form.message.data
@@ -105,6 +112,7 @@ def contact():
         server.sendmail(fromaddr, toaddr, text)
         server.quit()
         return render_template('thanks.html')
+
     else:
         return render_template('contact.html', form=form)
 
