@@ -9,7 +9,8 @@ const DEFAULT_HPP = '12'
 
 const INSTA_POST_PATH = 'https://www.instagram.com/p/'
 const INSTA_USER_PATH = 'https://www.instagram.com/'
-const PATH_BASE = 'https://bookzen.top/bookzen/api/v1.0'
+// const PATH_BASE = 'https://bookzen.top/bookzen/api/v1.0'
+const PATH_BASE = 'http://localhost:5000/api/v1.0'
 const PATH_SEARCH = '/books'
 const INSTA_PATH_SEARCH = '/insta_feed'
 const PARAM_SEARCH = 'keyword='
@@ -207,6 +208,7 @@ const BookNotFound = () => {
   )
 }
 
+
 const InstagramFeed = ({ searchTerm, list }) => {
   return (
     <div className='container'>
@@ -215,12 +217,12 @@ const InstagramFeed = ({ searchTerm, list }) => {
       </div>
       <div className='columns is-multiline'>
         { list.map(item =>
-          <div key={item.id} className='column is-4 is-10-mobile is-offset-1-mobile'>
+          <div key={item.media_info.shortcode} className='column is-4 is-10-mobile is-offset-1-mobile'>
             <div className='card'>
               <div className='card-image'>
                 <a href={INSTA_POST_PATH + item.code} rel='nofollow' target='_blank'>
                   <figure className='image is-square'>
-                    <img src={item.thumbnail_src} alt='' />
+                    <img src={item.node.thumbnail_src} alt='' />
                   </figure>
                 </a>
               </div>
@@ -229,29 +231,29 @@ const InstagramFeed = ({ searchTerm, list }) => {
                   <div className='media-left'>
                     <figure className='image' style={{height: '40px', width: '40px'}}>
                       <img
-                        src={item.media_info.graphql.shortcode_media.owner.profile_pic_url}
-                        alt={item.media_info.graphql.shortcode_media.owner.full_name} />
+                        src={item.media_info.owner.profile_pic_url}
+                        alt={item.media_info.owner.full_name} />
                     </figure>
                   </div>
                   <div className='media-content'>
                     <p className='title is-4'>
-                      { item.media_info.graphql.shortcode_media.owner.full_name || item.media_info.graphql.shortcode_media.owner.username}
+                      { item.media_info.owner.full_name || item.media_info.owner.username}
                     </p>
                     <p className='subtitle is-6'>
                       <a
                         target='_blank'
-                        href={INSTA_USER_PATH + item.media_info.graphql.shortcode_media.owner.username}>
-                            @{item.media_info.graphql.shortcode_media.owner.username}
+                        href={INSTA_USER_PATH + item.media_info.owner.username}>
+                            @{item.media_info.owner.username}
                       </a>
                     </p>
                   </div>
                 </div>
                 <div className='content'>
-                  <p><Truncate lines={4}>{item.caption}</Truncate></p>
+                  <p><Truncate lines={4}>{item.node.edge_media_to_caption.edges[0] && item.node.edge_media_to_caption.edges[0].node.text}</Truncate></p>
                 </div>
                 <footer className='card-footer'>
                   <p className='card-footer-item'>
-                    <small>{item.likes.count}<i className='fa fa-heart fa-1' aria-hidden='true' /> - {moment.unix(item.date).format('h:mm a - D MMMM YYYY')}</small>
+                    <small>{item.media_info.edge_media_preview_like.count}<i className='fa fa-heart fa-1' aria-hidden='true' /> - {moment.unix(item.media_info.taken_at_timestamp).format('h:mm a - D MMMM YYYY')}</small>
                   </p>
                 </footer>
               </div>
