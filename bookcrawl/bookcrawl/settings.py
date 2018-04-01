@@ -26,6 +26,10 @@ ROBOTSTXT_OBEY = True
 #  Disable cookies (enabled by default)
 COOKIES_ENABLED = True
 
+ITEM_PIPELINES = {'bookcrawl.pipelines.MongoPipeline': 900}
+
+MONGODB_URI = 'mongodb://localhost:27017'
+MONGODB_DB = "bookzen"
 
 DOWNLOADER_MIDDLEWARES = {
     'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware': 810,
@@ -33,20 +37,20 @@ DOWNLOADER_MIDDLEWARES = {
     'scrapy_fake_useragent.middleware.RandomUserAgentMiddleware': 400,
 }
 
-ITEM_PIPELINES = {'bookcrawl.pipelines.MongoPipeline': 900}
-
-MONGODB_URI = 'mongodb://localhost:27017'
-MONGODB_DB = "bookzen"
-
 #  Enable and configure the AutoThrottle extension (disabled by default)
 #  See http://doc.scrapy.org/en/latest/topics/autothrottle.html
 AUTOTHROTTLE_ENABLED = True
-#  The initial download delay
 AUTOTHROTTLE_START_DELAY = 5
-#  The maximum download delay to be set in case of high latencies
 AUTOTHROTTLE_MAX_DELAY = 60
-#  The average number of requests Scrapy should be sending in parallel to
-#  each remote server
 AUTOTHROTTLE_TARGET_CONCURRENCY = 1.0
-#  Enable showing throttling stats for every response received:
 AUTOTHROTTLE_DEBUG = True
+
+
+# SPLASH settings
+SPLASH_URL = 'http://192.168.59.103:8050'
+
+DUPEFILTER_CLASS = 'scrapy_splash.SplashAwareDupeFilter'
+
+SPIDER_MIDDLEWARES = {
+    'scrapy_splash.SplashDeduplicateArgsMiddleware': 100,
+}

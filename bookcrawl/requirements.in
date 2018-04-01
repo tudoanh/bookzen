@@ -1,0 +1,4 @@
+scrapy
+unidecode
+pymongo
+scrapy-fake-useragent

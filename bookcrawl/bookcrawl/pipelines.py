@@ -5,12 +5,13 @@
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
 
-
+import logging
 import pymongo
 
-from scrapy.conf import settings
 from scrapy.exceptions import DropItem
-from scrapy import log
+
+
+logger = logging.getLogger(__name__)
 
 
 class MongoPipeline(object):
@@ -54,9 +55,5 @@ class MongoPipeline(object):
 
             else:
                 collection.insert({k: v[0] for k, v in dict(item).items()})
-                log.msg(
-                    "Book added to MongoDB database!",
-                    level=log.DEBUG,
-                    spider=spider,
-                )
+                logger.info("Book added to MongoDB database!")
                 return item
