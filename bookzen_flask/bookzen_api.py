@@ -1,6 +1,4 @@
 import json
-import random
-import time
 
 from flask import url_for
 from flask_cors import CORS
@@ -42,96 +40,25 @@ def merge_two_dicts(x, y):
 
 class InstagramBot:
     url = 'https://www.instagram.com/'
-    url_login = 'https://www.instagram.com/accounts/login/ajax/'
     url_tag = 'https://www.instagram.com/explore/tags/{}/?__a=1'
     url_media_detail = 'https://www.instagram.com/p/{}/?__a=1'
     url_user_detail = 'https://www.instagram.com/{}/?__a=1'
-    user_agent = (
-        "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 "
-        "(KHTML, like Gecko) Chrome/48.0.2564.103 Safari/537.36"
-    )
-    accept_language = 'ru-RU,ru;q=0.8,en-US;q=0.6,en;q=0.4'
-    login_status = False
-    user_login = app.config['INSTAGRAM_USER']
-    user_password = app.config['INSTAGRAM_PASSWORD']
     s = requests.Session()
-
-    def login(self):
-        print('Trying to login ...')
-        self.s.cookies.update(
-            {
-                'sessionid': '',
-                'mid': '',
-                'ig_pr': '1',
-                'ig_vw': '1920',
-                'csrftoken': '',
-                's_network': '',
-                'ds_user_id': '',
-            }
-        )
-        self.login_post = {
-            'username': self.user_login, 'password': self.user_password
-        }
-        self.s.headers.update(
-            {
-                'Accept-Encoding': 'gzip, deflate',
-                'Accept-Language': self.accept_language,
-                'Connection': 'keep-alive',
-                'Content-Length': '0',
-                'Host': 'www.instagram.com',
-                'Origin': 'https://www.instagram.com',
-                'Referer': 'https://www.instagram.com/',
-                'User-Agent': self.user_agent,
-                'X-Instagram-AJAX': '1',
-                'X-Requested-With': 'XMLHttpRequest',
-            }
-        )
-        r = self.s.get(self.url)
-        self.s.headers.update({'X-CSRFToken': r.cookies['csrftoken']})
-        time.sleep(2 * random.random())
-        login = self.s.post(
-            self.url_login, data=self.login_post, allow_redirects=True
-        )
-        self.s.headers.update({'X-CSRFToken': login.cookies['csrftoken']})
-        self.csrftoken = login.cookies['csrftoken']
-        time.sleep(2 * random.random())
-
-        if login.status_code == 200:
-            r = self.s.get('https://www.instagram.com/')
-            finder = r.text.find(self.user_login)
-            if finder != -1:
-                self.login_status = True
-                log_string = 'Login success!'
-                print(log_string)
-            else:
-                self.login_status = False
-                print('Login error! Check your login data!')
-        else:
-            print('Login error! Connection error!')
 
     def get_media_by_tag(self, tag):
         """ Get media ID set, by your hashtag """
-        if self.login_status:
-            url_tag = self.url_tag.format(tag)
-            r = self.s.get(url_tag)
-            return r.json()
-
-        else:
-            return {'error': 'Can not login'}
+        url_tag = self.url_tag.format(tag)
+        r = self.s.get(url_tag)
+        return r.json()
 
     def get_media_info(self, media_id):
-        if self.login_status:
-            media_url = self.url_media_detail.format(media_id)
-            r = self.s.get(media_url)
-            return r.json()
-
-        else:
-            return {'error': 'Can not login'}
+        media_url = self.url_media_detail.format(media_id)
+        r = self.s.get(media_url)
+        return r.json().get('graphql').get('shortcode_media')
 
 
 class GetInstagramTagFeed(Resource):
     insta = InstagramBot()
-    insta.login()
 
     def get(self):
         parser = reqparse.RequestParser(bundle_errors=True)
