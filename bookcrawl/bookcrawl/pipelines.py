@@ -25,7 +25,7 @@ class MongoPipeline(object):
     def from_crawler(cls, crawler):
         return cls(
             mongo_uri=crawler.settings.get('MONGODB_URI'),
-            mongo_db=crawler.settings.get('MONGODB_DB', 'bookzen')
+            mongo_db=crawler.settings.get('MONGODB_DB', 'bookzen'),
         )
 
     def open_spider(self, spider):
@@ -42,10 +42,21 @@ class MongoPipeline(object):
             if not data:
                 is_valid = False
                 raise DropItem("Missing %s!" % data)
+
         if is_valid:
-            if collection.find({'name_unidecode': item['name_unidecode'], 'spider': spider.name}).count() != 0:
+            if collection.find(
+                {
+                    'name_unidecode': item['name_unidecode'],
+                    'spider': spider.name,
+                }
+            ).count() != 0:
                 raise DropItem("Item existed")
+
             else:
                 collection.insert({k: v[0] for k, v in dict(item).items()})
-                log.msg("Book added to MongoDB database!", level=log.DEBUG, spider=spider)
+                log.msg(
+                    "Book added to MongoDB database!",
+                    level=log.DEBUG,
+                    spider=spider,
+                )
                 return item
