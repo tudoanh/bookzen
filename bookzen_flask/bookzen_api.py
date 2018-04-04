@@ -1,4 +1,5 @@
 import json
+from json.decoder import JSONDecodeError
 
 from flask import url_for
 from flask_cors import CORS
@@ -49,7 +50,10 @@ class InstagramBot:
         """ Get media ID set, by your hashtag """
         url_tag = self.url_tag.format(tag)
         r = self.s.get(url_tag)
-        return r.json()
+        try:
+            return r.json()
+        except JSONDecodeError:
+            return []
 
     def get_media_info(self, media_id):
         media_url = self.url_media_detail.format(media_id)
@@ -79,6 +83,8 @@ class GetInstagramTagFeed(Resource):
             )
         except KeyError:
             return {'msg': 'Instagram API has been changed.'}, 204
+        except TypeError:
+            return {'msg': 'Keyword not found'}, 404
 
         for media in feed:
             media['media_info'] = (

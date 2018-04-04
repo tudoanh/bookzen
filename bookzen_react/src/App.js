@@ -10,7 +10,7 @@ const DEFAULT_HPP = '12'
 const INSTA_POST_PATH = 'https://www.instagram.com/p/'
 const INSTA_USER_PATH = 'https://www.instagram.com/'
 // const PATH_BASE = 'https://bookzen.top/bookzen/api/v1.0'
-const PATH_BASE = 'http://localhost:5000/api/v1.0'
+const PATH_BASE = 'https://bookzen.doanhtu.science/api/v1.0'
 const PATH_SEARCH = '/books'
 const INSTA_PATH_SEARCH = '/insta_feed'
 const PARAM_SEARCH = 'keyword='
@@ -73,8 +73,12 @@ class App extends Component {
   }
 
   setInstagramFeed (feed) {
-    const { entries } = feed
-    this.setState({ entries })
+    if (!feed.msg) {
+      const { entries } = feed
+      this.setState({ entries })
+    } else {
+      this.setState({ entries: [] })
+    }
   }
 
   fetchSearchBooks (searchTerm, page) {
@@ -381,7 +385,7 @@ const NavBar = () => {
               <i className='fa fa-github' />
             </span>
           </a>
-          <a className='nav-item' href='#'>
+          <a className='nav-item'>
             <span className='icon'>
               <i className='fa fa-instagram' />
             </span>
@@ -395,10 +399,10 @@ const NavBar = () => {
         </span>
 
         <div id='nav-menu' className='nav-right nav-menu'>
-          <a className='nav-item' href='https://medium.com/@doanhtu' target='_blank'>
+          <a className='nav-item' href='https://medium.com/@doanhtu' target='_blank' rel="noopener noreferrer">
                         /blog
                     </a>
-          <a className='nav-item' href='https://tudoanh.typeform.com/to/BsA7mv' target='_blank'>
+          <a className='nav-item' href='https://tudoanh.typeform.com/to/BsA7mv' target='_blank' rel="noopener noreferrer">
                         /contact
                     </a>
         </div>
